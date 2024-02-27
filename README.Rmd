@@ -41,9 +41,19 @@ usethis::use_build_ignore("flowcluster.Rproj")
 usethis::use_build_ignore("README.Rmd")
 
 # Let's create a package website that auto-deploys with pkgdown:
-usethis::use_pkgdown()
+#usethis::use_pkgdown()
+usethis::use_pkgdown_github_pages()
+
 # Add the pkgdown action:
 usethis::use_github_action("pkgdown")
+
+# Add example data: read the data bit in the r-pkg book
+usethis::use_data_raw()
+
+# load in the package
+devtools::load_all()
+# document the package
+devtools::document()
 ```
 
 ```{r, engine='bash', eval=FALSE}
