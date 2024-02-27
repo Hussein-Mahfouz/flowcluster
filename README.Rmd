@@ -25,7 +25,7 @@ The goal of flowcluster is to ...
 ```{r, eval=FALSE, echo=FALSE}
 usethis::use_description()
 usethis::use_version()
-usethis::use_r(name="flowcluster")
+usethis::use_r(name = "flowcluster")
 # Let's set-up actions...
 usethis::use_github_action_check_standard()
 # Let's see if it with a check:
@@ -40,6 +40,15 @@ usethis::use_build_ignore("flowcluster.Rproj")
 # And README.Rmd:
 usethis::use_build_ignore("README.Rmd")
 
+# Let's create a package website that auto-deploys with pkgdown:
+usethis::use_pkgdown()
+# Add the pkgdown action:
+usethis::use_github_action("pkgdown")
+```
+
+```{r, engine='bash', eval=FALSE}
+# see if the workflows are working:
+gh run list
 ```
 
 
