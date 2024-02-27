@@ -2,7 +2,10 @@
 output: github_document
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+This is a minimal package for clustering OD desire lines (or flows). 
+
+1. Create distance matrix between OD pairs
+2. Pass distance matrix to a clustering algorithm 
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -14,14 +17,20 @@ knitr::opts_chunk$set(
 # flowcluster
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of flowcluster is to ...
 
 ```{r, eval=FALSE, echo=FALSE}
-
 usethis::use_description()
 usethis::use_version()
 usethis::use_r(name="flowcluster")
+# Let's set-up actions...
+usethis::use_github_action_check_standard()
+
 ```
 
+
+```{r}
+```
