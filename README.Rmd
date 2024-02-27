@@ -28,6 +28,17 @@ usethis::use_version()
 usethis::use_r(name="flowcluster")
 # Let's set-up actions...
 usethis::use_github_action_check_standard()
+# Let's see if it with a check:
+devtools::check()
+
+
+# Let's add a license
+usethis::use_mit_license("Hussein Mahfouz")
+
+# Use buid_ignore
+usethis::use_build_ignore("flowcluster.Rproj")
+# And README.Rmd:
+usethis::use_build_ignore("README.Rmd")
 
 ```
 

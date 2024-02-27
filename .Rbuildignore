@@ -1,1 +1,4 @@
 ^\.github$
+^flowcluster\.Rproj$
+^LICENSE\.md$
+^README\.Rmd$
