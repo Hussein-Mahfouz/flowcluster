@@ -15,7 +15,14 @@ flowcluster = function(x, eps, min_pts, dist_method = "euclidean") {
   message("hello world")
 }
 
-#' flows_leeds
+#' Example OD data
+#'
+#' @note The schema data can be (re-)generated using code in the
+#' `data-raw` directory.
+#'
+#' @docType data
+#' @keywords datasets
+#' @name flows_leeds
 #' 
 #' @description A dataset containing origin-destination pairs (flows) for Leeds, UK.
 #' The dataset contains origin, destination, count and geometry columns.
