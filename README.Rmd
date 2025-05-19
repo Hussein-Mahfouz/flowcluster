@@ -55,6 +55,9 @@ usethis::use_data_raw()
 devtools::load_all()
 # document the package
 devtools::document()
+
+# Add dependencies to the package
+usethis::use_package("geographr")
 ```
 
 ```{r, engine='bash', eval=FALSE}
@@ -84,5 +87,10 @@ devtools::load_all()
 
 ```{r}
 library(flowcluster)
-flowcluster::flowcluster()
+flows_sf <- flows_leeds
+flows_sf
+plot(flows_sf["count"])
+flows_clustered <- flowcluster::flowcluster(
+  flows_sf
+)
 ```

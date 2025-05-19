@@ -11,5 +11,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 URL: https://hussein-mahfouz.github.io/flowcluster/
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
+Imports:
+  sf,
+  dbscan
 LazyData: true

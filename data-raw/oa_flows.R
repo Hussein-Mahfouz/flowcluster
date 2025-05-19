@@ -1,4 +1,5 @@
 library(tidyverse)
+pak::pak("humaniverse/geographr")
 library(geographr)
 library(od)
 library(sf)
@@ -82,3 +83,6 @@ flows_leeds <- od::od_to_sf(flows_leeds, zones_leeds)
 # 6. Save dataset for internal or exported use
 # ---------------------
 usethis::use_data(flows_leeds, overwrite = TRUE)
+
+# Check file size
+fs::file_size("data/flows_leeds.rda")

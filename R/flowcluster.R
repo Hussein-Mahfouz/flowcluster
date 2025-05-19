@@ -12,5 +12,15 @@
 #' flowcluster(flowdata, eps = 0.1, min_pts = 5, dist_method = "euclidean")
 #' }
 flowcluster = function(x, eps, min_pts, dist_method = "euclidean") {
-    message("hello world")
+  message("hello world")
 }
+
+#' flows_leeds
+#' 
+#' @description A dataset containing origin-destination pairs (flows) for Leeds, UK.
+#' The dataset contains origin, destination, count and geometry columns.
+#' Count is the number of flows between origin and destination.
+#' 
+#' @examples
+#' head(flows_leeds)
+NULL
