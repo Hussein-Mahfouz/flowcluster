@@ -42,7 +42,7 @@ usethis::use_build_ignore("flowcluster.Rproj")
 usethis::use_build_ignore("README.Rmd")
 
 # Let's create a package website that auto-deploys with pkgdown:
-#usethis::use_pkgdown()
+# usethis::use_pkgdown()
 usethis::use_pkgdown_github_pages()
 
 # Add the pkgdown action:
@@ -62,7 +62,7 @@ devtools::document()
 usethis::use_package("geographr")
 ```
 
-```{r, engine='bash', eval=FALSE}
+```bash
 # see if the workflows are working:
 gh run list
 ```
@@ -90,9 +90,19 @@ devtools::load_all()
 ```{r}
 library(flowcluster)
 flows_sf <- flows_leeds
-flows_sf
+head(flows_sf)
 plot(flows_sf["count"])
 flows_clustered <- flowcluster::flowcluster(
   flows_sf
 )
+```
+
+# Style
+
+We use the tidyverse style.
+To ensure your changes abide by this, run the following command before pushing changes:
+
+```{r}
+#| eval: false
+styler::style_pkg()
 ```
