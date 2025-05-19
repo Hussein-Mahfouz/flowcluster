@@ -48,6 +48,8 @@ usethis::use_pkgdown_github_pages()
 # Add the pkgdown action:
 usethis::use_github_action("pkgdown")
 
+usethis::use_github_action("check-standard")
+
 # Add example data: read the data bit in the r-pkg book
 usethis::use_data_raw()
 
