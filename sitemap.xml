@@ -1,24 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://hussein-mahfouz.github.io/flowcluster/404.html</loc>
-  </url>
-  <url>
-    <loc>https://hussein-mahfouz.github.io/flowcluster/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://hussein-mahfouz.github.io/flowcluster/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://hussein-mahfouz.github.io/flowcluster/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://hussein-mahfouz.github.io/flowcluster/index.html</loc>
-  </url>
-  <url>
-    <loc>https://hussein-mahfouz.github.io/flowcluster/reference/flowcluster.html</loc>
-  </url>
-  <url>
-    <loc>https://hussein-mahfouz.github.io/flowcluster/reference/index.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/404.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/LICENSE-text.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/LICENSE.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/authors.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/index.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/flowcluster.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/flows_leeds.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/index.html</loc></url>
 </urlset>
+
