@@ -15,6 +15,10 @@ if (!file.exists(zip_file)) {
   download.file(zip_url, zip_file, mode = "wb")
 }
 
+# Check what files are in the zip
+zip_contents <- unzip(zip_path, list = TRUE)
+print(zip_contents$Name)
+
 # Unzip only the required CSV
 unzip(zip_file, files = target_file, exdir = "data-raw")
 
