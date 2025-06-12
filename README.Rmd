@@ -20,4 +20,35 @@ You can install the development version of flowcluster from GitHub with:
 #| eval=FALSE
 # install.packages("devtools")
 devtools::install_github("Hussein-Mahfouz/flowcluster")
+
+```
+
+Or, for local development, clone the repo, open the project in RStudio, and run:
+
+```{r}
+#| results: hide
+devtools::load_all()
+```
+
+
+# Example
+
+```{r}
+library(flowcluster)
+flows_sf <- flows_leeds
+head(flows_sf)
+plot(flows_sf["count"])
+flows_clustered <- flowcluster::flowcluster(
+  flows_sf
+)
+```
+
+# Style
+
+We use the tidyverse style.
+To ensure your changes abide by this, run the following command before pushing changes:
+
+```{r}
+#| eval: false
+styler::style_pkg()
 ```
