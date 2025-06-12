@@ -2,65 +2,22 @@
 output: github_document
 ---
 
-This is a minimal package for clustering OD desire lines (or flows). 
-
-1. Create distance matrix between OD pairs
-2. Pass distance matrix to a clustering algorithm 
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 # flowcluster
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
-The goal of flowcluster is to ...
+The goal of flowcluster is to provide minimal functionality for clustering OD desire lines (or flows). This includes: 1. Creating distance matrices between OD pairs 2. Passing distance matrices to a clustering algorithm
 
-```{r, eval=FALSE, echo=FALSE}
-usethis::use_description()
-usethis::use_version()
-usethis::use_r(name = "flowcluster")
-# Let's set-up actions...
-usethis::use_github_action_check_standard()
-# Let's see if it with a check:
-devtools::check()
+## Install from GitHub
 
+You can install the development version of flowcluster from GitHub with:
 
-# Let's add a license
-usethis::use_mit_license("Hussein Mahfouz")
-
-# Use buid_ignore
-usethis::use_build_ignore("flowcluster.Rproj")
-# And README.Rmd:
-usethis::use_build_ignore("README.Rmd")
-
-# Let's create a package website that auto-deploys with pkgdown:
-#usethis::use_pkgdown()
-usethis::use_pkgdown_github_pages()
-
-# Add the pkgdown action:
-usethis::use_github_action("pkgdown")
-
-# Add example data: read the data bit in the r-pkg book
-usethis::use_data_raw()
-
-# load in the package
-devtools::load_all()
-# document the package
-devtools::document()
-```
-
-```{r, engine='bash', eval=FALSE}
-# see if the workflows are working:
-gh run list
-```
-
-
-```{r}
+``` r
+#| eval=FALSE
+# install.packages("devtools")
+devtools::install_github("Hussein-Mahfouz/flowcluster")
 ```

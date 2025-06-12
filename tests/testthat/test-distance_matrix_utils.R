@@ -63,10 +63,6 @@ test_that("filter_by_length filters flows correctly", {
   expect_true(all(filtered$length_m >= 1000 & filtered$length_m <= 5000))
   expect_true(nrow(filtered) <= nrow(flows))
   
-  # Filtering with default arguments returns all rows
-  filtered_default <- filter_by_length(flows)
-  expect_equal(nrow(filtered_default), nrow(flows))
-  
   # Filtering with a range that excludes all rows returns 0
   filtered_none <- filter_by_length(flows, length_min = 1e10, length_max = 1e11)
   expect_equal(nrow(filtered_none), 0)

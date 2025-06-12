@@ -1,8 +1,11 @@
-#' Calculate Flow Distance and Dissimilarity
+#' Calculate Flow Distance and Dissimilarity based on [Tao and Thill, 2017]
 #' @param x tibble with flow_ID, x, y, u, v, length_m
 #' @param alpha numeric, origin weight
 #' @param beta numeric, destination weight
 #' @return tibble of all OD pairs with fd, fds columns
+#' @references
+#' Tao, R., Thill, J.-C., 2016. Spatial cluster detection in spatial flow data. Geographical
+#' Analysis 48, 355–372. https://doi.org/10.1111/gean.12100
 #' @examples
 #' distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
 #' @export
@@ -14,11 +17,20 @@ flow_distance <- function(x, alpha = 1, beta = 1) {
   if (alpha + beta != 2) {
     stop("Alpha and beta must sum to 2.")
   }
-  grid <- tidyr::expand_grid(flow_ID_a = x$flow_ID, flow_ID_b = x$flow_ID)
-  grid <- dplyr::inner_join(grid, dplyr::select(x, flow_ID, x, y, u, v, length_m),
+  # create combination pairs of all flows
+  grid <- tidyr::expand_grid(flow_ID_a = x$flow_ID, 
+                             flow_ID_b = x$flow_ID)
+  message("Adding coordinates data back onto the unique pairs ...")
+  # add the coordinate data
+  grid <- grid |>
+    # --- add flow_a coordinates
+    dplyr::inner_join(x |> 
+                        dplyr::select(flow_ID, x, y, u, v, length_m),
                             by = c("flow_ID_a" = "flow_ID")) |>
     dplyr::rename_with(~paste0(.x, "_i"), c("x", "y", "u", "v", "length_m")) |>
-    dplyr::inner_join(dplyr::select(x, flow_ID, x, y, u, v, length_m),
+    # --- add flow_b coordinates
+    dplyr::inner_join(x |>
+                        dplyr::select(x, flow_ID, x, y, u, v, length_m),
                       by = c("flow_ID_b" = "flow_ID")) |>
     dplyr::rename_with(~paste0(.x, "_j"), c("x", "y", "u", "v", "length_m")) |>
     dplyr::mutate(

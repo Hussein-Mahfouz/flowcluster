@@ -51,6 +51,13 @@ filter_by_length <- function(x, length_min = 0, length_max = Inf) {
   if (length_min < 0 || length_max < 0) {
     stop("Both length_min and length_max must be positive values.")
   }
+  # No flows should have length 0. If length_min is 0, we send a message and filter 
+  # out any flows with length 0.
+  if (length_min == 0) {
+    message("Filtering out flows with length 0...")
+    x <- dplyr::filter(x, length_m > 0)
+  }
+  # Filter flows by user specified length range
   x_filtered <- dplyr::filter(x, length_m >= length_min & length_m <= length_max)
   message(
     glue::glue("Flows remaining after filtering: {nrow(x_filtered)} (",
@@ -68,7 +75,7 @@ filter_by_length <- function(x, length_min = 0, length_max = Inf) {
 add_xyuv <- function(x) {
   # Ensure input is sf
   stopifnot(inherits(x, "sf"))
-  
+  message("Extracting start and end coordinates from flow geometries...")
   # Extract start and end points as sfc
   start_points <- lwgeom::st_startpoint(x$geometry)
   end_points   <- lwgeom::st_endpoint(x$geometry)
@@ -78,11 +85,13 @@ add_xyuv <- function(x) {
   end_coords   <- sf::st_coordinates(end_points)
   
   # Add to data frame
+  message("Adding x, y, u, v columns to flow data...")
   x$x <- start_coords[, "X"]
   x$y <- start_coords[, "Y"]
   x$u <- end_coords[, "X"]
   x$v <- end_coords[, "Y"]
-  
+  # Add flow IDs
+  message("Assigning unique flow IDs...")
   add_flow_ids(x)
 }
 

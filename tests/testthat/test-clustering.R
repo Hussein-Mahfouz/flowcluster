@@ -2,12 +2,16 @@ library(testthat)
 library(dplyr)
 library(tibble)
 
-# Use a small sample for speed
-flows <- flows_leeds %>%
-  sf::st_transform(3857) %>%
-  add_flow_length() %>%
-  add_xyuv() %>%
-  head(1000)
+# Load sample flow data and project to metric CRS (e.g., EPSG:3857)
+flows <- flows_leeds
+flows <- st_transform(flows, 3857)
+flows <- flows[1:1000, ]
+# Add length (meters) to each flow line
+flows <- add_flow_length(flows)
+# Filter flows based on length (e.g., between 100 and 10000 meters)
+flows = filter_by_length(flows, length_min = 1000, length_max = 20000)
+# Add x, y, u, v coordinates to flows
+flows <- add_xyuv(flows)
 
 
 test_that("flow_distance: alpha/beta validation and output", {
