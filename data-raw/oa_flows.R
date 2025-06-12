@@ -1,4 +1,5 @@
 library(tidyverse)
+pak::pak("humaniverse/geographr")
 library(geographr)
 library(od)
 library(sf)
@@ -36,7 +37,7 @@ msoa_geom <- geographr::boundaries_msoa21 |>
 # Load MSOA-to-LTLA lookup table
 lookup <- geographr::lookup_postcode_oa_lsoa_msoa_ltla_2025 |>
   select(msoa21_code, ltla24_code) |>
-  distinct(msoa21_code, .keep_all = TRUE) 
+  distinct(msoa21_code, .keep_all = TRUE)
 
 # ---------------------
 # 3. Preprocess OD flows
@@ -44,8 +45,8 @@ lookup <- geographr::lookup_postcode_oa_lsoa_msoa_ltla_2025 |>
 
 # Filter to include only workers commuting within the UK (exclude home workers)
 flows <- od_raw |>
-  filter(`Place of work indicator (4 categories) label` == 
-           "Working in the UK but not working at or from home") |>
+  filter(`Place of work indicator (4 categories) label` ==
+    "Working in the UK but not working at or from home") |>
   select(
     origin = `Middle layer Super Output Areas code`,
     destination = `MSOA of workplace code`,
@@ -86,3 +87,6 @@ flows_leeds <- od::od_to_sf(flows_leeds, zones_leeds)
 # 6. Save dataset for internal or exported use
 # ---------------------
 usethis::use_data(flows_leeds, overwrite = TRUE)
+
+# Check file size
+fs::file_size("data/flows_leeds.rda")
