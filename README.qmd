@@ -50,14 +50,13 @@ This is important for accurate length calculations and spatial operations.
 
 ```{r}
 library(flowcluster)
+library(tidyverse)
 library(sf)
 library(tmap)
 
 # Load sample flow data and project to metric CRS (e.g., EPSG:3857)
 flows_sf <- flows_leeds
 flows_sf <- st_transform(flows_sf, 3857)
-# # let's work with a subset of the data
-flows_sf <- flows_sf[1:1000, ]
 ```
 
 Next, add a column containing the length (in meters) of each flow line.  
@@ -66,7 +65,7 @@ This step also checks that your data is in a projected CRS.
 ```{r}
 # Add length (meters) to each flow line
 flows_sf <- add_flow_length(flows_sf)
-head(flows, 5)
+head(flows_sf, 5)
 ```
 
 Filter out flows based on a minimum and maximum length.
@@ -101,7 +100,8 @@ Convert the long-format distance table to a matrix, which is required for cluste
 # Create a distance matrix from the long-form distance data. Choose the column for distances you want to use.
 # The 'fds' column is the flow dissimilarity measure, and the 'fd' column is the flow distance measure.
 dmat <- distance_matrix(distances, distance_col = "fds")
-dmat
+# check 1st couple of rows columns of the distance matrix
+head(dmat[1:2, 1:2])
 ```
 
 ### Clustering 
@@ -179,6 +179,7 @@ flows_clustered = flows_sf |>
            alpha = 1,
            title.col = "Cluster",
            title.lwd = "No. of people",
+           scale = 10,
            legend.col.show = FALSE,
            showNA = FALSE) +
   tm_facets(by = "cluster",
@@ -205,4 +206,6 @@ flows_clustered = flows_sf |>
 - [ ] Add more distance matrices (e.g. Frechet distance)
 - [ ] Add more clustering algorithms, and use a more efficient data structure as a workaround for not being able 
 to use weights with other clustering algorithms
+
+## References
 
