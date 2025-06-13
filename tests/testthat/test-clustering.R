@@ -1,6 +1,7 @@
 library(testthat)
 library(dplyr)
 library(tibble)
+library(sf)
 
 # Load sample flow data and project to metric CRS (e.g., EPSG:3857)
 flows <- flows_leeds

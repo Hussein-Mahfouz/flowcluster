@@ -18,6 +18,7 @@
 #' @param x sf object of flows (LINESTRING, projected CRS)
 #' @return sf object with length_m column
 #' @examples
+#' flows <- sf::st_transform(flows_leeds, 3857)
 #' flows <- add_flow_length(flows)
 #' @export
 add_flow_length <- function(x) {
@@ -35,6 +36,8 @@ add_flow_length <- function(x) {
 #' @param length_max maximum length (default Inf)
 #' @return filtered sf object
 #' @examples
+#' flows <- sf::st_transform(flows_leeds, 3857)
+#' flows <- add_flow_length(flows)
 #' flows <- filter_by_length(flows, length_min = 5000, length_max = 12000)
 #' @export
 filter_by_length <- function(x, length_min = 0, length_max = Inf) {
@@ -70,6 +73,8 @@ filter_by_length <- function(x, length_min = 0, length_max = Inf) {
 #' @param x sf object of flows
 #' @return tibble with x, y, u, v, flow_ID columns
 #' @examples
+#' flows <- sf::st_transform(flows_leeds, 3857)
+#' flows <- add_flow_length(flows)
 #' flows <- add_xyuv(flows)
 #' @export
 add_xyuv <- function(x) {
@@ -95,20 +100,20 @@ add_xyuv <- function(x) {
   add_flow_ids(x)
 }
 
-#' Assign Unique IDs to Flows
+#' Assign Unique IDs to Flows (internal)
+
+#' Internal helper for assigning unique IDs to flows based on spatial columns. Used by \code{add_xyuv()}
 #' @param x tibble with origin, destination, x, y, u, v columns
 #' @return tibble with flow_ID column
-#' @examples
-#' flows <- add_flow_ids(flows)
-#' @export
+#' @keywords internal
 add_flow_ids <- function(x) {
   x |>
-    dplyr::group_by(origin, x, y) |>
+    dplyr::group_by(.data$origin, .data$x, .data$y) |>
     dplyr::mutate(origin_id = dplyr::cur_group_id()) |>
     dplyr::ungroup() |>
-    dplyr::group_by(destination, u, v) |>
+    dplyr::group_by(.data$destination, .data$u, .data$v) |>
     dplyr::mutate(dest_id = dplyr::cur_group_id()) |>
     dplyr::ungroup() |>
-    dplyr::mutate(flow_ID = paste0(origin, "_", origin_id, "-", destination, "_", dest_id)) |>
+    dplyr::mutate(flow_ID = paste0(.data$origin, "_", origin_id, "-", .data$destination, "_", dest_id)) |>
     dplyr::select(-origin_id, -dest_id)
 }
