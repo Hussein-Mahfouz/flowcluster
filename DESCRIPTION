@@ -13,8 +13,13 @@ URL: https://hussein-mahfouz.github.io/flowcluster/
 Depends: 
     R (>= 3.5.0)
 Imports:
-  sf,
-  dbscan
+    sf,
+    dbscan,
+    dplyr,
+    glue,
+    lwgeom,
+    tibble,
+    units
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0)
