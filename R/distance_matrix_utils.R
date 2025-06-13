@@ -108,12 +108,12 @@ add_xyuv <- function(x) {
 #' @keywords internal
 add_flow_ids <- function(x) {
   x |>
-    dplyr::group_by(origin, x, y) |>
+    dplyr::group_by(.data$origin, .data$x, .data$y) |>
     dplyr::mutate(origin_id = dplyr::cur_group_id()) |>
     dplyr::ungroup() |>
-    dplyr::group_by(destination, u, v) |>
+    dplyr::group_by(.data$destination, .data$u, .data$v) |>
     dplyr::mutate(dest_id = dplyr::cur_group_id()) |>
     dplyr::ungroup() |>
-    dplyr::mutate(flow_ID = paste0(origin, "_", origin_id, "-", destination, "_", dest_id)) |>
+    dplyr::mutate(flow_ID = paste0(.data$origin, "_", origin_id, "-", .data$destination, "_", dest_id)) |>
     dplyr::select(-origin_id, -dest_id)
 }

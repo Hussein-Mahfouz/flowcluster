@@ -16,11 +16,11 @@
 #' distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
 #' @export
 flow_distance <- function(x, alpha = 1, beta = 1) {
-  # check that alpha and beta are pstive number, and that they add up to 2
+  # check that alpha and beta are positive numbers, and that they add up to 2
   if (!is.numeric(alpha) || !is.numeric(beta) || alpha <= 0 || beta <= 0) {
     stop("Alpha and beta must be positive numbers.")
   }
-  if (alpha + beta != 2) {
+  if (abs(alpha + beta - 2) > 1e-6) {
     stop("Alpha and beta must sum to 2.")
   }
   # create combination pairs of all flows
@@ -31,12 +31,12 @@ flow_distance <- function(x, alpha = 1, beta = 1) {
   grid <- grid |>
     # --- add flow_a coordinates
     dplyr::inner_join(x |> 
-                        dplyr::select(flow_ID, x, y, u, v, length_m),
-                            by = c("flow_ID_a" = "flow_ID")) |>
+                        dplyr::select(.data$flow_ID, .data$x, .data$y, .data$u, .data$v, .data$length_m),
+                      by = c("flow_ID_a" = "flow_ID")) |>
     dplyr::rename_with(~paste0(.x, "_i"), c("x", "y", "u", "v", "length_m")) |>
     # --- add flow_b coordinates
     dplyr::inner_join(x |>
-                        dplyr::select(x, flow_ID, x, y, u, v, length_m),
+                        dplyr::select(.data$x, .data$flow_ID, .data$x, .data$y, .data$u, .data$v, .data$length_m),
                       by = c("flow_ID_b" = "flow_ID")) |>
     dplyr::rename_with(~paste0(.x, "_j"), c("x", "y", "u", "v", "length_m")) |>
     dplyr::mutate(
@@ -69,8 +69,8 @@ flow_distance <- function(x, alpha = 1, beta = 1) {
 #' @export
 distance_matrix <- function(distances, distance_col = "fds") {
   distances |>
-    dplyr::select(flow_ID_a, flow_ID_b, tidyselect::all_of(distance_col)) |>
-    tidyr::pivot_wider(names_from = flow_ID_b, values_from = tidyselect::all_of(distance_col)) |>
+    dplyr::select(.data$flow_ID_a, .data$flow_ID_b, tidyselect::all_of(distance_col)) |>
+    tidyr::pivot_wider(names_from = .data$flow_ID_b, values_from = tidyselect::all_of(distance_col)) |>
     tibble::column_to_rownames(var = "flow_ID_a")
 }
 
@@ -92,7 +92,7 @@ distance_matrix <- function(distances, distance_col = "fds") {
 #' @export
 weight_vector <- function(dist_mat, x, weight_col = "count") {
   x |>
-    dplyr::select(flow_ID, tidyselect::all_of(weight_col)) |>
+    dplyr::select(.data$flow_ID, tidyselect::all_of(weight_col)) |>
     dplyr::inner_join(
       tibble::tibble(flow_ID = rownames(dist_mat)),
       by = "flow_ID"
