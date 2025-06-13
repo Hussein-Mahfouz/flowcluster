@@ -7,6 +7,12 @@
 #' Tao, R., Thill, J.-C., 2016. Spatial cluster detection in spatial flow data. Geographical
 #' Analysis 48, 355–372. https://doi.org/10.1111/gean.12100
 #' @examples
+#' flows <- sf::st_transform(flows_leeds, 3857)
+#' flows = head(flows, 100) # for testing
+#' # Add flow lengths and coordinates
+#' flows <- add_flow_length(flows)
+#' flows <- add_xyuv(flows)
+#' # Calculate distances
 #' distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
 #' @export
 flow_distance <- function(x, alpha = 1, beta = 1) {
@@ -52,6 +58,13 @@ flow_distance <- function(x, alpha = 1, beta = 1) {
 #' @param distance_col column name for distance (default "fds")
 #' @return distance matrix (tibble with rownames)
 #' @examples
+#' flows <- sf::st_transform(flows_leeds, 3857)
+#' flows = head(flows, 100) # for testing
+#' # Add flow lengths and coordinates
+#' flows <- add_flow_length(flows)
+#' flows <- add_xyuv(flows)
+#' # Calculate distances
+#' distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
 #' dmat <- distance_matrix(distances)
 #' @export
 distance_matrix <- function(distances, distance_col = "fds") {
@@ -67,6 +80,14 @@ distance_matrix <- function(distances, distance_col = "fds") {
 #' @param weight_col column to use as weights (default = "count")
 #' @return numeric weight vector
 #' @examples
+#' flows <- sf::st_transform(flows_leeds, 3857)
+#' flows = head(flows, 100) # for testing
+#' # Add flow lengths and coordinates
+#' flows <- add_flow_length(flows)
+#' flows <- add_xyuv(flows)
+#' # Calculate distances
+#' distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
+#' dmat <- distance_matrix(distances)
 #' wvec <- weight_vector(dmat, flows, weight_col = "count")
 #' @export
 weight_vector <- function(dist_mat, x, weight_col = "count") {
@@ -87,6 +108,17 @@ weight_vector <- function(dist_mat, x, weight_col = "count") {
 #' @param minPts DBSCAN minPts parameter
 #' @return flows tibble with cluster column
 #' @examples
+#' flows <- sf::st_transform(flows_leeds, 3857)
+#' flows = head(flows, 100) # for testing
+#' # Add flow lengths and coordinates
+#' flows <- add_flow_length(flows)
+#' # filter by length
+#' flows <- filter_by_length(flows, length_min = 5000, length_max = 12000)
+#' flows <- add_xyuv(flows)
+#' # Calculate distances
+#' distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
+#' dmat <- distance_matrix(distances)
+#' wvec <- weight_vector(dmat, flows, weight_col = "count")
 #' clustered <- cluster_flows_dbscan(dmat, wvec, flows, eps = 8, minPts = 70)
 #' @export
 cluster_flows_dbscan <- function(dist_mat, w_vec, x, eps, minPts) {

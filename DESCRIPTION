@@ -19,7 +19,9 @@ Imports:
     glue,
     lwgeom,
     tibble,
-    units
+    units,
+    tidyr,
+    tidyselect
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0)
