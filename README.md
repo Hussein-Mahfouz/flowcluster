@@ -250,7 +250,7 @@ flows_clustered = flows_sf |>
            showNA = FALSE) +
   tm_facets(by = "cluster",
             free.coords = FALSE,
-            nrow = 3,
+            nrow = 4,
             showNA = FALSE) +
   tm_layout(fontfamily = 'Georgia',
             main.title = paste0("Clustered flows"),
@@ -262,10 +262,14 @@ flows_clustered = flows_sf |>
             legend.stack = "horizontal",
             # remove panel headers
             #panel.show = FALSE,
-            frame = FALSE) 
+            frame = FALSE) -> cluster_results
+
+cluster_results
 ```
 
 ![](README_files/figure-commonmark/unnamed-chunk-13-1.png)
+
+![](man/figures/cluster_results.png)
 
 ## Future Work
 

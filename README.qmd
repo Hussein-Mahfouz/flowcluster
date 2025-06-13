@@ -184,7 +184,7 @@ flows_clustered = flows_sf |>
            showNA = FALSE) +
   tm_facets(by = "cluster",
             free.coords = FALSE,
-            nrow = 3,
+            nrow = 4,
             showNA = FALSE) +
   tm_layout(fontfamily = 'Georgia',
             main.title = paste0("Clustered flows"),
@@ -196,9 +196,21 @@ flows_clustered = flows_sf |>
             legend.stack = "horizontal",
             # remove panel headers
             #panel.show = FALSE,
-            frame = FALSE) 
+            frame = FALSE) -> cluster_results
+
+cluster_results
 
 ```
+
+```{r}
+#| echo: false
+# save the tmap output
+tmap_save(tm = cluster_results, filename = "man/figures/cluster_results.png", width = 8, dpi = 1080, asp = 0)
+# load the saved map 
+```
+
+![](man/figures/cluster_results.png)
+
 
 ## Future Work
 
