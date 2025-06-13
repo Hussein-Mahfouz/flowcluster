@@ -4,8 +4,15 @@
 <url><loc>https://hussein-mahfouz.github.io/flowcluster/LICENSE.html</loc></url>
 <url><loc>https://hussein-mahfouz.github.io/flowcluster/authors.html</loc></url>
 <url><loc>https://hussein-mahfouz.github.io/flowcluster/index.html</loc></url>
-<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/flowcluster.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/add_flow_ids.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/add_flow_length.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/add_xyuv.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/cluster_flows_dbscan.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/distance_matrix.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/filter_by_length.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/flow_distance.html</loc></url>
 <url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/flows_leeds.html</loc></url>
 <url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/index.html</loc></url>
+<url><loc>https://hussein-mahfouz.github.io/flowcluster/reference/weight_vector.html</loc></url>
 </urlset>
 
