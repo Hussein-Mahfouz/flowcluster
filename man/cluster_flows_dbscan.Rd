@@ -21,7 +21,7 @@ cluster_flows_dbscan(dist_mat, w_vec, x, eps, minPts)
 flows tibble with cluster column
 }
 \description{
-Cluster Flows using DBSCAN
+See \link[dbscan]{dbscan} for details on the DBSCAN algorithm.
 }
 \examples{
 flows <- sf::st_transform(flows_leeds, 3857)

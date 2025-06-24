@@ -104,6 +104,9 @@ weight_vector <- function(dist_mat, x, weight_col = "count") {
 }
 
 #' Cluster Flows using DBSCAN
+#' 
+#' See \link[dbscan]{dbscan} for details on the DBSCAN algorithm.
+#' 
 #' @param dist_mat distance matrix
 #' @param w_vec weight vector
 #' @param x flows tibble with flow_ID
