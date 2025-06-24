@@ -70,11 +70,13 @@ head(flows_sf, 5)
 ```
 
 Filter out flows based on a minimum and maximum length.
+In the code below, we filter flows to keep only those between 1 and 20 kilometers.
 
 ```{r}
 # Filter flows based on length (e.g., between 100 and 10000 meters)
 flows_sf = filter_by_length(flows_sf, length_min = 1000, length_max = 20000)
 ```
+
 Then, extract start and end coordinates for each flow, and assign unique IDs.  
 These are needed for subsequent distance calculations and clustering.
 
