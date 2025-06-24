@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>What the Package Does (One Line, Title Case) • flowcluster</title>
+<title>Cluster Origin-Destination Flow Data • flowcluster</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="What the Package Does (One Line, Title Case)">
-<meta name="description" content="What the package does (one paragraph).">
-<meta property="og:description" content="What the package does (one paragraph).">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Cluster Origin-Destination Flow Data">
+<meta name="description" content="Provides functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes creating distance matrices between OD pairs and passing distance matrices to a clustering algorithm. See the academic paper Tao and Thill (2016) &lt;doi:10.1111/gean.12100&gt; for more details on spatial clustering of flows.">
+<meta property="og:description" content="Provides functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes creating distance matrices between OD pairs and passing distance matrices to a clustering algorithm. See the academic paper Tao and Thill (2016) &lt;doi:10.1111/gean.12100&gt; for more details on spatial clustering of flows.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -50,7 +50,11 @@
 <!-- badges: start -->
 
 <!-- badges: end -->
-<p>The goal of flowcluster is to provide minimal functionality for clustering OD desire lines (or flows). This includes: 1. Creating distance matrices between OD pairs 2. Passing distance matrices to a clustering algorithm</p>
+<p>The goal of flowcluster is to provide minimal functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes:</p>
+<ol style="list-style-type: decimal">
+<li>Creating distance matrices between OD pairs</li>
+<li>Passing distance matrices to a clustering algorithm</li>
+</ol>
 <div class="section level2">
 <h2 id="install-from-github">Install from GitHub<a class="anchor" aria-label="anchor" href="#install-from-github"></a>
 </h2>
@@ -69,17 +73,16 @@
 <div class="section level3">
 <h3 id="data-preparation">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a>
 </h3>
-<p>First, load your package and the sample data, and project it to a metric CRS.<br>
+<p>First, load the flowcluster package and the sample data, and project it to a <a href="https://r.geocompx.org/spatial-class#projected-coordinate-reference-systems" class="external-link">projected</a> coordinate reference system (CRS).<br>
 This is important for accurate length calculations and spatial operations.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://hussein-mahfouz.github.io/flowcluster/">flowcluster</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap" class="external-link">tmap</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Load sample flow data and project to metric CRS (e.g., EPSG:3857)</span></span>
+<span><span class="co"># Load sample flow data and project to metric CRS (e.g., EPSG:27700)</span></span>
 <span><span class="va">flows_sf</span> <span class="op">&lt;-</span> <span class="va">flows_leeds</span></span>
-<span><span class="va">flows_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">flows_sf</span>, <span class="fl">3857</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">flows_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">flows_sf</span>, <span class="st">"EPSG:27700"</span><span class="op">)</span></span></code></pre></div>
 <p>Next, add a column containing the length (in meters) of each flow line.<br>
 This step also checks that your data is in a projected CRS.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -89,17 +92,17 @@ This step also checks that your data is in a projected CRS.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>Simple feature collection with <span class="dv">5</span> features and <span class="dv">4</span> fields</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>Geometry type<span class="sc">:</span> LINESTRING</span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>Dimension<span class="sc">:</span>     XY</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="sc">-</span><span class="fl">189882.9</span> ymin<span class="sc">:</span> <span class="dv">7148099</span> xmax<span class="sc">:</span> <span class="sc">-</span><span class="fl">149890.2</span> ymax<span class="sc">:</span> <span class="dv">7157033</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>Projected CRS<span class="sc">:</span> WGS <span class="dv">84</span> <span class="sc">/</span> Pseudo<span class="sc">-</span>Mercator</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="fl">419427.1</span> ymin<span class="sc">:</span> <span class="fl">443211.1</span> xmax<span class="sc">:</span> <span class="dv">443015</span> ymax<span class="sc">:</span> <span class="dv">448448</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>Projected CRS<span class="sc">:</span> OSGB36 <span class="sc">/</span> British National Grid</span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co"># A tibble: 5 × 5</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  origin    destination count                               geometry length_m</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>     <span class="er">&lt;</span>chr<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>                       <span class="er">&lt;</span>LINESTRING [m]<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="dv">1</span> E02002330 E02002330      <span class="dv">30</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>)       <span class="dv">0</span> </span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="dv">2</span> E02002330 E02002331     <span class="dv">366</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="fl">149890.2</span> <span class="dv">7155611</span>)    <span class="fl">5960.</span></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="dv">3</span> E02002330 E02002332       <span class="dv">6</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="fl">189882.9</span> <span class="dv">7153431</span>)   <span class="fl">34394.</span></span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="dv">4</span> E02002330 E02002333       <span class="dv">2</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="fl">187947.5</span> <span class="dv">7151336</span>)   <span class="fl">32768.</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="dv">5</span> E02002330 E02002334      <span class="dv">31</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="fl">151100.3</span> <span class="dv">7148099</span>)   <span class="fl">10039.</span></span></code></pre></div>
-<p>Filter out flows based on a minimum and maximum length.</p>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  origin    destination count                             geometry length_m</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>     <span class="er">&lt;</span>chr<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>                     <span class="er">&lt;</span>LINESTRING [m]<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="dv">1</span> E02002330 E02002330      <span class="dv">30</span>   (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">439593.3</span> <span class="dv">448448</span>)       <span class="dv">0</span> </span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="dv">2</span> E02002330 E02002331     <span class="dv">366</span>   (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="dv">443015</span> <span class="fl">447640.9</span>)    <span class="fl">3516.</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="dv">3</span> E02002330 E02002332       <span class="dv">6</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">419427.1</span> <span class="fl">446200.1</span>)   <span class="fl">20291.</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="dv">4</span> E02002330 E02002333       <span class="dv">2</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">420574.6</span> <span class="fl">444971.5</span>)   <span class="fl">19334.</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="dv">5</span> E02002330 E02002334      <span class="dv">31</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">442341.2</span> <span class="fl">443211.1</span>)    <span class="fl">5914.</span></span></code></pre></div>
+<p>Filter out flows based on a minimum and maximum length. In the code below, we filter flows to keep only those between 1 and 20 kilometers.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter flows based on length (e.g., between 100 and 10000 meters)</span></span>
 <span><span class="va">flows_sf</span> <span class="op">=</span> <span class="fu"><a href="reference/filter_by_length.html">filter_by_length</a></span><span class="op">(</span><span class="va">flows_sf</span>, length_min <span class="op">=</span> <span class="fl">1000</span>, length_max <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span></code></pre></div>
@@ -112,23 +115,23 @@ These are needed for subsequent distance calculations and clustering.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>Simple feature collection with <span class="dv">5</span> features and <span class="dv">9</span> fields</span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>Geometry type<span class="sc">:</span> LINESTRING</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>Dimension<span class="sc">:</span>     XY</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="sc">-</span><span class="fl">166579.3</span> ymin<span class="sc">:</span> <span class="dv">7140540</span> xmax<span class="sc">:</span> <span class="sc">-</span><span class="fl">149890.2</span> ymax<span class="sc">:</span> <span class="dv">7157033</span></span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>Projected CRS<span class="sc">:</span> WGS <span class="dv">84</span> <span class="sc">/</span> Pseudo<span class="sc">-</span>Mercator</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="fl">420574.6</span> ymin<span class="sc">:</span> <span class="fl">443211.1</span> xmax<span class="sc">:</span> <span class="dv">443015</span> ymax<span class="sc">:</span> <span class="dv">448448</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>Projected CRS<span class="sc">:</span> OSGB36 <span class="sc">/</span> British National Grid</span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co"># A tibble: 5 × 10</span></span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  origin    destination count                   geometry length_m       x      y</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>     <span class="er">&lt;</span>chr<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>           <span class="er">&lt;</span>LINESTRING [m]<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="dv">1</span> E02002330 E02002331     <span class="dv">366</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="dv">1498</span>…    <span class="fl">5960.</span> <span class="sc">-</span><span class="fl">1.56e5</span> <span class="fl">7.16e6</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="dv">2</span> E02002330 E02002334      <span class="dv">31</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="dv">1511</span>…   <span class="fl">10039.</span> <span class="sc">-</span><span class="fl">1.56e5</span> <span class="fl">7.16e6</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="dv">3</span> E02002330 E02002335      <span class="dv">17</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="dv">1636</span>…   <span class="fl">10832.</span> <span class="sc">-</span><span class="fl">1.56e5</span> <span class="fl">7.16e6</span></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="dv">4</span> E02002330 E02002349       <span class="dv">1</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="dv">1665</span>…   <span class="fl">19770.</span> <span class="sc">-</span><span class="fl">1.56e5</span> <span class="fl">7.16e6</span></span>
-<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="dv">5</span> E02002330 E02002351       <span class="dv">7</span> (<span class="sc">-</span><span class="fl">155678.3</span> <span class="dv">7157033</span>, <span class="sc">-</span><span class="dv">1603</span>…   <span class="fl">16882.</span> <span class="sc">-</span><span class="fl">1.56e5</span> <span class="fl">7.16e6</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  origin    destination count                    geometry length_m      x      y</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>     <span class="er">&lt;</span>chr<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>            <span class="er">&lt;</span>LINESTRING [m]<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="dv">1</span> E02002330 E02002331     <span class="dv">366</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="dv">443015</span> <span class="dv">4</span>…    <span class="fl">3516.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="dv">2</span> E02002330 E02002333       <span class="dv">2</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">420574.6</span>…   <span class="fl">19334.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="dv">3</span> E02002330 E02002334      <span class="dv">31</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">442341.2</span>…    <span class="fl">5914.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="dv">4</span> E02002330 E02002335      <span class="dv">17</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">434926.1</span>…    <span class="fl">6385.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="dv">5</span> E02002330 E02002336       <span class="dv">5</span> (<span class="fl">439593.3</span> <span class="dv">448448</span>, <span class="fl">424754.2</span>…   <span class="fl">15687.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span></span>
 <span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co"># ℹ 3 more variables: u &lt;dbl&gt;, v &lt;dbl&gt;, flow_ID &lt;chr&gt;</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="distance-matrix-calculation">Distance Matrix calculation<a class="anchor" aria-label="anchor" href="#distance-matrix-calculation"></a>
 </h3>
 <p>Calculate a pairwise distance measure between all flows using their coordinates.<br>
-You can adjust <code>alpha</code> and <code>beta</code> to change the weighting of start and end locations.</p>
+You can adjust <code>alpha</code> and <code>beta</code> to change the relative importance of start and end locations in the clustering process.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute pairwise flow distances (fd and fds columns)</span></span>
 <span><span class="va">flows</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">flows_sf</span><span class="op">)</span></span>
@@ -140,20 +143,20 @@ You can adjust <code>alpha</code> and <code>beta</code> to change the weighting 
 <span><span class="va">dmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/distance_matrix.html">distance_matrix</a></span><span class="op">(</span><span class="va">distances</span>, distance_col <span class="op">=</span> <span class="st">"fds"</span><span class="op">)</span></span>
 <span><span class="co"># check 1st couple of rows columns of the distance matrix</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">dmat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>                        E02002330_1<span class="sc">-</span>E02002331_2 E02002330_1<span class="sc">-</span>E02002334_5</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>E02002330_1<span class="sc">-</span>E02002331_2               <span class="fl">0.0000000</span>               <span class="fl">0.9836044</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>E02002330_1<span class="sc">-</span>E02002334_5               <span class="fl">0.9836044</span>               <span class="fl">0.0000000</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>                        E02002330_1<span class="sc">-</span>E02002331_2 E02002330_1<span class="sc">-</span>E02002333_4</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>E02002330_1<span class="sc">-</span>E02002331_2                <span class="fl">0.000000</span>                <span class="fl">2.741081</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>E02002330_1<span class="sc">-</span>E02002333_4                <span class="fl">2.741081</span>                <span class="fl">0.000000</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="clustering">Clustering<a class="anchor" aria-label="anchor" href="#clustering"></a>
 </h3>
 <p>Prepare a weight vector, typically based on a “count” column (number of trips, etc).<br>
-If your data does not have a “count” column, you can add one with <code>flows$count &lt;- 1</code>. Weights are very handy, otherwise our matrix would be huge, as we would have to replicate each OD pair n times depending on the number of observations between them. Unfortunately, there is no out of the</p>
+If your data does not have a “count” column, you can add one with <code>flows$count &lt;- 1</code>. Weights are very handy, otherwise our matrix would be huge, as we would have to replicate each OD pair n times depending on the number of observations between them. Unfortunately, there is no out-of-the-box support for adding weights in other clustering algorithms such as <code>hdbscan</code> or <code>optics</code>, so we will use {<a href="https://github.com/mhahsler/dbscan" class="external-link">dbscan</a>} for now, which does support weights.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prepare weights for each flow (here we use the count column)</span></span>
 <span><span class="va">wvec</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/weight_vector.html">weight_vector</a></span><span class="op">(</span><span class="va">dmat</span>, <span class="va">flows</span>, weight_col <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span></span></code></pre></div>
 <p>Finally, cluster the flows using DBSCAN.<br>
-Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and minimum cluster size. Cluster composition is greatly affected by these prameters.</p>
+Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and minimum cluster size. Cluster composition is determined by these DBSCAN parameters.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Cluster flows using DBSCAN</span></span>
 <span><span class="va">flows_clustered</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cluster_flows_dbscan.html">cluster_flows_dbscan</a></span><span class="op">(</span><span class="va">dmat</span>, <span class="va">wvec</span>, <span class="va">flows</span>, eps <span class="op">=</span> <span class="fl">8</span>, minPts <span class="op">=</span> <span class="fl">70</span><span class="op">)</span></span>
@@ -161,43 +164,42 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <span><span class="co"># View the first few rows of the clustered data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flows_clustered</span>, <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># A tibble: 10 × 10</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>   origin    destination count length_m        x        y       u      v flow_ID</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>   <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>     <span class="er">&lt;</span>chr<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span> <span class="er">&lt;</span>chr<span class="sc">&gt;</span>  </span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a> <span class="dv">1</span> E02002330 E02002331     <span class="dv">366</span>    <span class="fl">5960.</span> <span class="sc">-</span><span class="fl">155678.</span> <span class="fl">7157033.</span> <span class="sc">-</span><span class="fl">1.50e5</span> <span class="fl">7.16e6</span> E02002…</span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a> <span class="dv">2</span> E02002330 E02002334      <span class="dv">31</span>   <span class="fl">10039.</span> <span class="sc">-</span><span class="fl">155678.</span> <span class="fl">7157033.</span> <span class="sc">-</span><span class="fl">1.51e5</span> <span class="fl">7.15e6</span> E02002…</span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a> <span class="dv">3</span> E02002330 E02002335      <span class="dv">17</span>   <span class="fl">10832.</span> <span class="sc">-</span><span class="fl">155678.</span> <span class="fl">7157033.</span> <span class="sc">-</span><span class="fl">1.64e5</span> <span class="fl">7.15e6</span> E02002…</span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a> <span class="dv">4</span> E02002330 E02002349       <span class="dv">1</span>   <span class="fl">19770.</span> <span class="sc">-</span><span class="fl">155678.</span> <span class="fl">7157033.</span> <span class="sc">-</span><span class="fl">1.67e5</span> <span class="fl">7.14e6</span> E02002…</span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a> <span class="dv">5</span> E02002330 E02002351       <span class="dv">7</span>   <span class="fl">16882.</span> <span class="sc">-</span><span class="fl">155678.</span> <span class="fl">7157033.</span> <span class="sc">-</span><span class="fl">1.60e5</span> <span class="fl">7.14e6</span> E02002…</span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a> <span class="dv">6</span> E02002330 E02002358       <span class="dv">5</span>   <span class="fl">19213.</span> <span class="sc">-</span><span class="fl">155678.</span> <span class="fl">7157033.</span> <span class="sc">-</span><span class="fl">1.62e5</span> <span class="fl">7.14e6</span> E02002…</span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a> <span class="dv">7</span> E02002330 E02002359      <span class="dv">10</span>   <span class="fl">19061.</span> <span class="sc">-</span><span class="fl">155678.</span> <span class="fl">7157033.</span> <span class="sc">-</span><span class="fl">1.52e5</span> <span class="fl">7.14e6</span> E02002…</span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a> <span class="dv">8</span> E02002331 E02002330      <span class="dv">19</span>    <span class="fl">5960.</span> <span class="sc">-</span><span class="fl">149890.</span> <span class="fl">7155611.</span> <span class="sc">-</span><span class="fl">1.56e5</span> <span class="fl">7.16e6</span> E02002…</span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a> <span class="dv">9</span> E02002331 E02002334      <span class="dv">61</span>    <span class="fl">7609.</span> <span class="sc">-</span><span class="fl">149890.</span> <span class="fl">7155611.</span> <span class="sc">-</span><span class="fl">1.51e5</span> <span class="fl">7.15e6</span> E02002…</span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="dv">10</span> E02002331 E02002335      <span class="dv">17</span>   <span class="fl">14973.</span> <span class="sc">-</span><span class="fl">149890.</span> <span class="fl">7155611.</span> <span class="sc">-</span><span class="fl">1.64e5</span> <span class="fl">7.15e6</span> E02002…</span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co"># ℹ 1 more variable: cluster &lt;int&gt;</span></span></code></pre></div>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>   origin destination count length_m      x      y      u      v flow_ID cluster</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>   <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>  <span class="er">&lt;</span>chr<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>  <span class="er">&lt;</span>dbl<span class="sc">&gt;</span> <span class="er">&lt;</span>chr<span class="sc">&gt;</span>     <span class="er">&lt;</span>int<span class="sc">&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a> <span class="dv">1</span> E0200… E02002331     <span class="dv">366</span>    <span class="fl">3516.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.43e5</span> <span class="fl">4.48e5</span> E02002…       <span class="dv">1</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a> <span class="dv">2</span> E0200… E02002333       <span class="dv">2</span>   <span class="fl">19334.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.21e5</span> <span class="fl">4.45e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a> <span class="dv">3</span> E0200… E02002334      <span class="dv">31</span>    <span class="fl">5914.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.42e5</span> <span class="fl">4.43e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a> <span class="dv">4</span> E0200… E02002335      <span class="dv">17</span>    <span class="fl">6385.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.35e5</span> <span class="fl">4.44e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a> <span class="dv">5</span> E0200… E02002336       <span class="dv">5</span>   <span class="fl">15687.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.25e5</span> <span class="fl">4.43e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a> <span class="dv">6</span> E0200… E02002341       <span class="dv">9</span>   <span class="fl">12306.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.29e5</span> <span class="fl">4.42e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a> <span class="dv">7</span> E0200… E02002344       <span class="dv">7</span>   <span class="fl">11883.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.31e5</span> <span class="fl">4.40e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a> <span class="dv">8</span> E0200… E02002345       <span class="dv">1</span>   <span class="fl">14937.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.27e5</span> <span class="fl">4.40e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a> <span class="dv">9</span> E0200… E02002346       <span class="dv">2</span>   <span class="fl">16966.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.25e5</span> <span class="fl">4.39e5</span> E02002…       <span class="dv">0</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="dv">10</span> E0200… E02002347       <span class="dv">3</span>   <span class="fl">13534.</span> <span class="fl">4.40e5</span> <span class="fl">4.48e5</span> <span class="fl">4.30e5</span> <span class="fl">4.39e5</span> E02002…       <span class="dv">0</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># how many unique clusters were found?</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">flows_clustered</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">315</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">317</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># number of flows in each cluster</span></span>
 <span><span class="va">flows_clustered</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">summarise</span><span class="op">(</span>n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># A tibble: 315 × 2</span></span>
+<div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># A tibble: 317 × 2</span></span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>   cluster     n</span>
 <span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>     <span class="sc">&lt;</span>int<span class="sc">&gt;</span> <span class="er">&lt;</span>int<span class="sc">&gt;</span></span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a> <span class="dv">1</span>       <span class="dv">0</span>  <span class="dv">6607</span></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a> <span class="dv">2</span>      <span class="dv">33</span>   <span class="dv">157</span></span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a> <span class="dv">3</span>      <span class="dv">16</span>    <span class="dv">61</span></span>
-<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a> <span class="dv">4</span>      <span class="dv">55</span>    <span class="dv">27</span></span>
-<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a> <span class="dv">5</span>     <span class="dv">262</span>    <span class="dv">20</span></span>
-<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a> <span class="dv">6</span>      <span class="dv">24</span>    <span class="dv">19</span></span>
-<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a> <span class="dv">7</span>     <span class="dv">188</span>    <span class="dv">17</span></span>
-<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a> <span class="dv">8</span>     <span class="dv">162</span>    <span class="dv">16</span></span>
-<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a> <span class="dv">9</span>      <span class="dv">30</span>    <span class="dv">14</span></span>
-<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="dv">10</span>     <span class="dv">189</span>    <span class="dv">13</span></span>
-<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co"># ℹ 305 more rows</span></span></code></pre></div>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a> <span class="dv">1</span>       <span class="dv">0</span>  <span class="dv">8652</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a> <span class="dv">2</span>      <span class="dv">14</span>   <span class="dv">179</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a> <span class="dv">3</span>       <span class="dv">4</span>    <span class="dv">62</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a> <span class="dv">4</span>     <span class="dv">104</span>    <span class="dv">57</span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a> <span class="dv">5</span>     <span class="dv">187</span>    <span class="dv">56</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a> <span class="dv">6</span>      <span class="dv">28</span>    <span class="dv">42</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a> <span class="dv">7</span>       <span class="dv">2</span>    <span class="dv">35</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a> <span class="dv">8</span>      <span class="dv">74</span>    <span class="dv">29</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a> <span class="dv">9</span>     <span class="dv">228</span>    <span class="dv">29</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="dv">10</span>       <span class="dv">6</span>    <span class="dv">26</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co"># ℹ 307 more rows</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="visualise">Visualise<a class="anchor" aria-label="anchor" href="#visualise"></a>
@@ -291,7 +293,8 @@ Tao, Ran, and Jean-Claude Thill. 2016. “Spatial Cluster Detection in Spatial F
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>First Last <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/YOUR-ORCID-ID" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Hussein Mahfouz <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1706-7802" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Robin Lovelace <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-5679-6536" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -307,7 +310,7 @@ Tao, Ran, and Jean-Claude Thill. 2016. “Spatial Cluster Detection in Spatial F
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by First Last.</p>
+  <p>Developed by Hussein Mahfouz, Robin Lovelace.</p>
 </div>
 
 <div class="pkgdown-footer-right">
