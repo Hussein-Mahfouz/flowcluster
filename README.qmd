@@ -89,7 +89,7 @@ head(flows_sf, 5)
 ### Distance Matrix calculation
 
 Calculate a pairwise distance measure between all flows using their coordinates.  
-You can adjust `alpha` and `beta` to change the weighting of start and end locations.
+You can adjust `alpha` and `beta` to change the relative importance of start and end locations in the clustering process.
 
 ```{r}
 # Compute pairwise flow distances (fd and fds columns)
