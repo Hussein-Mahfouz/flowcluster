@@ -2,6 +2,8 @@
 ^flowcluster\.Rproj$
 ^LICENSE\.md$
 ^README\.Rmd$
+^README\.qmd$
+^bibliography\.bib$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$

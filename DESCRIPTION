@@ -2,8 +2,7 @@ Package: flowcluster
 Title: What the Package Does (One Line, Title Case)
 Version: 0.0.0.9001
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -11,7 +10,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 URL: https://hussein-mahfouz.github.io/flowcluster/
 Depends: 
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 Imports:
     sf,
     dbscan,

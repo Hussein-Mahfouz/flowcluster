@@ -1,4 +1,7 @@
-#' Calculate Flow Distance and Dissimilarity based on [Tao and Thill, 2017]
+#' Calculate Flow Distance and Dissimilarity
+#'
+#' This function calculates flow distance and dissimilarity measures between all
+#' pairs of flows based on the method described in @tao2016spatial.
 #' @param x tibble with flow_ID, x, y, u, v, length_m
 #' @param alpha numeric, origin weight
 #' @param beta numeric, destination weight

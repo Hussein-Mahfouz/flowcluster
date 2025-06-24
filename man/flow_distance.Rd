@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{flow_distance}
 \alias{flow_distance}
-\title{Calculate Flow Distance and Dissimilarity based on \link{Tao and Thill, 2017}}
+\title{Calculate Flow Distance and Dissimilarity}
 \usage{
 flow_distance(x, alpha = 1, beta = 1)
 }
@@ -17,7 +17,8 @@ flow_distance(x, alpha = 1, beta = 1)
 tibble of all OD pairs with fd, fds columns
 }
 \description{
-Calculate Flow Distance and Dissimilarity based on \link{Tao and Thill, 2017}
+This function calculates flow distance and dissimilarity measures between all
+pairs of flows based on the method described in @tao2016spatial.
 }
 \examples{
 flows <- sf::st_transform(flows_leeds, 3857)
