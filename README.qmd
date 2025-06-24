@@ -113,7 +113,10 @@ Prepare a weight vector, typically based on a "count" column (number of trips, e
 If your data does not have a "count" column, you can add one with `flows$count <- 1`. 
 Weights are very handy, otherwise our matrix would be huge, as we would have to replicate 
 each OD pair n times depending on the number of observations between them. Unfortunately, 
-there is no out-of-the-box support for this in the current implementation.
+there is no out-of-the-box support for adding weights in other clustering algorithms such
+as `hdbscan` or `optics`, so we will use {[dbscan](https://github.com/mhahsler/dbscan)} 
+for now, which does support weights.
+
 
 ```{r}
 # Prepare weights for each flow (here we use the count column)

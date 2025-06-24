@@ -9,9 +9,11 @@
 <!-- badges: end -->
 
 The goal of flowcluster is to provide minimal functionality for
-clustering OD desire lines (or flows). This includes: 1. Creating
-distance matrices between OD pairs 2. Passing distance matrices to a
-clustering algorithm
+clustering origin-destination (OD) pairs, representing desire lines (or
+flows). This includes:
+
+1.  Creating distance matrices between OD pairs
+2.  Passing distance matrices to a clustering algorithm
 
 ## Install from GitHub
 
@@ -37,20 +39,21 @@ and flow dissimilarity measures described in (Tao and Thill 2016).
 
 ### Data preparation
 
-First, load your package and the sample data, and project it to a metric
-CRS.  
+First, load the flowcluster package and the sample data, and project it
+to a
+[projected](https://r.geocompx.org/spatial-class#projected-coordinate-reference-systems)
+coordinate reference system (CRS).  
 This is important for accurate length calculations and spatial
 operations.
 
 ``` r
-library(flowcluster)
 library(tidyverse)
 library(sf)
 library(tmap)
 
-# Load sample flow data and project to metric CRS (e.g., EPSG:3857)
+# Load sample flow data and project to metric CRS (e.g., EPSG:27700)
 flows_sf <- flows_leeds
-flows_sf <- st_transform(flows_sf, 3857)
+flows_sf <- st_transform(flows_sf, "EPSG:27700")
 ```
 
 Next, add a column containing the length (in meters) of each flow
@@ -66,18 +69,19 @@ head(flows_sf, 5)
     Simple feature collection with 5 features and 4 fields
     Geometry type: LINESTRING
     Dimension:     XY
-    Bounding box:  xmin: -189882.9 ymin: 7148099 xmax: -149890.2 ymax: 7157033
-    Projected CRS: WGS 84 / Pseudo-Mercator
+    Bounding box:  xmin: 419427.1 ymin: 443211.1 xmax: 443015 ymax: 448448
+    Projected CRS: OSGB36 / British National Grid
     # A tibble: 5 × 5
-      origin    destination count                               geometry length_m
-      <chr>     <chr>       <dbl>                       <LINESTRING [m]>    <dbl>
-    1 E02002330 E02002330      30 (-155678.3 7157033, -155678.3 7157033)       0 
-    2 E02002330 E02002331     366 (-155678.3 7157033, -149890.2 7155611)    5960.
-    3 E02002330 E02002332       6 (-155678.3 7157033, -189882.9 7153431)   34394.
-    4 E02002330 E02002333       2 (-155678.3 7157033, -187947.5 7151336)   32768.
-    5 E02002330 E02002334      31 (-155678.3 7157033, -151100.3 7148099)   10039.
+      origin    destination count                             geometry length_m
+      <chr>     <chr>       <dbl>                     <LINESTRING [m]>    <dbl>
+    1 E02002330 E02002330      30   (439593.3 448448, 439593.3 448448)       0 
+    2 E02002330 E02002331     366   (439593.3 448448, 443015 447640.9)    3516.
+    3 E02002330 E02002332       6 (439593.3 448448, 419427.1 446200.1)   20291.
+    4 E02002330 E02002333       2 (439593.3 448448, 420574.6 444971.5)   19334.
+    5 E02002330 E02002334      31 (439593.3 448448, 442341.2 443211.1)    5914.
 
-Filter out flows based on a minimum and maximum length.
+Filter out flows based on a minimum and maximum length. In the code
+below, we filter flows to keep only those between 1 and 20 kilometers.
 
 ``` r
 # Filter flows based on length (e.g., between 100 and 10000 meters)
@@ -97,24 +101,24 @@ head(flows_sf, 5)
     Simple feature collection with 5 features and 9 fields
     Geometry type: LINESTRING
     Dimension:     XY
-    Bounding box:  xmin: -166579.3 ymin: 7140540 xmax: -149890.2 ymax: 7157033
-    Projected CRS: WGS 84 / Pseudo-Mercator
+    Bounding box:  xmin: 420574.6 ymin: 443211.1 xmax: 443015 ymax: 448448
+    Projected CRS: OSGB36 / British National Grid
     # A tibble: 5 × 10
-      origin    destination count                   geometry length_m       x      y
-      <chr>     <chr>       <dbl>           <LINESTRING [m]>    <dbl>   <dbl>  <dbl>
-    1 E02002330 E02002331     366 (-155678.3 7157033, -1498…    5960. -1.56e5 7.16e6
-    2 E02002330 E02002334      31 (-155678.3 7157033, -1511…   10039. -1.56e5 7.16e6
-    3 E02002330 E02002335      17 (-155678.3 7157033, -1636…   10832. -1.56e5 7.16e6
-    4 E02002330 E02002349       1 (-155678.3 7157033, -1665…   19770. -1.56e5 7.16e6
-    5 E02002330 E02002351       7 (-155678.3 7157033, -1603…   16882. -1.56e5 7.16e6
+      origin    destination count                    geometry length_m      x      y
+      <chr>     <chr>       <dbl>            <LINESTRING [m]>    <dbl>  <dbl>  <dbl>
+    1 E02002330 E02002331     366 (439593.3 448448, 443015 4…    3516. 4.40e5 4.48e5
+    2 E02002330 E02002333       2 (439593.3 448448, 420574.6…   19334. 4.40e5 4.48e5
+    3 E02002330 E02002334      31 (439593.3 448448, 442341.2…    5914. 4.40e5 4.48e5
+    4 E02002330 E02002335      17 (439593.3 448448, 434926.1…    6385. 4.40e5 4.48e5
+    5 E02002330 E02002336       5 (439593.3 448448, 424754.2…   15687. 4.40e5 4.48e5
     # ℹ 3 more variables: u <dbl>, v <dbl>, flow_ID <chr>
 
 ### Distance Matrix calculation
 
 Calculate a pairwise distance measure between all flows using their
 coordinates.  
-You can adjust `alpha` and `beta` to change the weighting of start and
-end locations.
+You can adjust `alpha` and `beta` to change the relative importance of
+start and end locations in the clustering process.
 
 ``` r
 # Compute pairwise flow distances (fd and fds columns)
@@ -133,9 +137,9 @@ dmat <- distance_matrix(distances, distance_col = "fds")
 head(dmat[1:2, 1:2])
 ```
 
-                            E02002330_1-E02002331_2 E02002330_1-E02002334_5
-    E02002330_1-E02002331_2               0.0000000               0.9836044
-    E02002330_1-E02002334_5               0.9836044               0.0000000
+                            E02002330_1-E02002331_2 E02002330_1-E02002333_4
+    E02002330_1-E02002331_2                0.000000                2.741081
+    E02002330_1-E02002333_4                2.741081                0.000000
 
 ### Clustering
 
@@ -144,8 +148,11 @@ trips, etc).
 If your data does not have a “count” column, you can add one with
 `flows$count <- 1`. Weights are very handy, otherwise our matrix would
 be huge, as we would have to replicate each OD pair n times depending on
-the number of observations between them. Unfortunately, there is no out
-of the
+the number of observations between them. Unfortunately, there is no
+out-of-the-box support for adding weights in other clustering algorithms
+such as `hdbscan` or `optics`, so we will use
+{[dbscan](https://github.com/mhahsler/dbscan)} for now, which does
+support weights.
 
 ``` r
 # Prepare weights for each flow (here we use the count column)
@@ -154,8 +161,8 @@ wvec <- weight_vector(dmat, flows, weight_col = "count")
 
 Finally, cluster the flows using DBSCAN.  
 Adjust `eps` and `minPts` to control cluster tightness and minimum
-cluster size. Cluster composition is greatly affected by these
-prameters.
+cluster size. Cluster composition is determined by these DBSCAN
+parameters.
 
 ``` r
 # Cluster flows using DBSCAN
@@ -166,26 +173,25 @@ head(flows_clustered, 10)
 ```
 
     # A tibble: 10 × 10
-       origin    destination count length_m        x        y       u      v flow_ID
-       <chr>     <chr>       <dbl>    <dbl>    <dbl>    <dbl>   <dbl>  <dbl> <chr>  
-     1 E02002330 E02002331     366    5960. -155678. 7157033. -1.50e5 7.16e6 E02002…
-     2 E02002330 E02002334      31   10039. -155678. 7157033. -1.51e5 7.15e6 E02002…
-     3 E02002330 E02002335      17   10832. -155678. 7157033. -1.64e5 7.15e6 E02002…
-     4 E02002330 E02002349       1   19770. -155678. 7157033. -1.67e5 7.14e6 E02002…
-     5 E02002330 E02002351       7   16882. -155678. 7157033. -1.60e5 7.14e6 E02002…
-     6 E02002330 E02002358       5   19213. -155678. 7157033. -1.62e5 7.14e6 E02002…
-     7 E02002330 E02002359      10   19061. -155678. 7157033. -1.52e5 7.14e6 E02002…
-     8 E02002331 E02002330      19    5960. -149890. 7155611. -1.56e5 7.16e6 E02002…
-     9 E02002331 E02002334      61    7609. -149890. 7155611. -1.51e5 7.15e6 E02002…
-    10 E02002331 E02002335      17   14973. -149890. 7155611. -1.64e5 7.15e6 E02002…
-    # ℹ 1 more variable: cluster <int>
+       origin destination count length_m      x      y      u      v flow_ID cluster
+       <chr>  <chr>       <dbl>    <dbl>  <dbl>  <dbl>  <dbl>  <dbl> <chr>     <int>
+     1 E0200… E02002331     366    3516. 4.40e5 4.48e5 4.43e5 4.48e5 E02002…       1
+     2 E0200… E02002333       2   19334. 4.40e5 4.48e5 4.21e5 4.45e5 E02002…       0
+     3 E0200… E02002334      31    5914. 4.40e5 4.48e5 4.42e5 4.43e5 E02002…       0
+     4 E0200… E02002335      17    6385. 4.40e5 4.48e5 4.35e5 4.44e5 E02002…       0
+     5 E0200… E02002336       5   15687. 4.40e5 4.48e5 4.25e5 4.43e5 E02002…       0
+     6 E0200… E02002341       9   12306. 4.40e5 4.48e5 4.29e5 4.42e5 E02002…       0
+     7 E0200… E02002344       7   11883. 4.40e5 4.48e5 4.31e5 4.40e5 E02002…       0
+     8 E0200… E02002345       1   14937. 4.40e5 4.48e5 4.27e5 4.40e5 E02002…       0
+     9 E0200… E02002346       2   16966. 4.40e5 4.48e5 4.25e5 4.39e5 E02002…       0
+    10 E0200… E02002347       3   13534. 4.40e5 4.48e5 4.30e5 4.39e5 E02002…       0
 
 ``` r
 # how many unique clusters were found?
 length(unique(flows_clustered$cluster))
 ```
 
-    [1] 315
+    [1] 317
 
 ``` r
 # number of flows in each cluster
@@ -195,20 +201,20 @@ flows_clustered |>
   arrange(desc(n))
 ```
 
-    # A tibble: 315 × 2
+    # A tibble: 317 × 2
        cluster     n
          <int> <int>
-     1       0  6607
-     2      33   157
-     3      16    61
-     4      55    27
-     5     262    20
-     6      24    19
-     7     188    17
-     8     162    16
-     9      30    14
-    10     189    13
-    # ℹ 305 more rows
+     1       0  8652
+     2      14   179
+     3       4    62
+     4     104    57
+     5     187    56
+     6      28    42
+     7       2    35
+     8      74    29
+     9     228    29
+    10       6    26
+    # ℹ 307 more rows
 
 ### Visualise
 
