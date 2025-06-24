@@ -1,5 +1,5 @@
 Package: flowcluster
-Title: What the Package Does (One Line, Title Case)
+Title: Cluster Origin-Destination Flow Data
 Version: 0.0.0.9001
 Authors@R: c(
     person("Hussein", "Mahfouz", , "tshma@leeds.ac.uk", role = c("aut", "cre"),
@@ -7,7 +7,12 @@ Authors@R: c(
     person("Robin", "Lovelace", , "rob00x@gmail.com", role = "aut",
            comment = c(ORCID = "0000-0001-5679-6536"))
   )
-Description: What the package does (one paragraph).
+Description: Provides functionality for clustering
+    origin-destination (OD) pairs, representing desire lines (or flows).
+    This includes creating distance matrices between OD pairs and passing
+    distance matrices to a clustering algorithm. See the academic paper 
+    Tao and Thill (2016) <doi:10.1111/gean.12100>
+    for more details on spatial clustering of flows.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
