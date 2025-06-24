@@ -19,7 +19,10 @@ default-image-extension: ""
 
 <!-- badges: end -->
 
-The goal of flowcluster is to provide minimal functionality for clustering OD desire lines (or flows). This includes: 1. Creating distance matrices between OD pairs 2. Passing distance matrices to a clustering algorithm
+The goal of flowcluster is to provide minimal functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes:
+
+1. Creating distance matrices between OD pairs
+2. Passing distance matrices to a clustering algorithm
 
 ## Install from GitHub
 
@@ -34,7 +37,6 @@ devtools::install_github("Hussein-Mahfouz/flowcluster")
 Load it as follows:
 
 ```{r}
-#| eval=FALSE
 library(flowcluster)
 ```
 
@@ -45,11 +47,10 @@ The package provides a function to create a distance matrix from a data frame of
 
 ### Data preparation
 
-First, load your package and the sample data, and project it to a metric CRS.  
+First, load the flowcluster package and the sample data, and project it to a [projected](https://r.geocompx.org/spatial-class#projected-coordinate-reference-systems) coordinate reference system (CRS).  
 This is important for accurate length calculations and spatial operations.
 
 ```{r}
-library(flowcluster)
 library(tidyverse)
 library(sf)
 library(tmap)
