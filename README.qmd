@@ -113,7 +113,7 @@ Prepare a weight vector, typically based on a "count" column (number of trips, e
 If your data does not have a "count" column, you can add one with `flows$count <- 1`. 
 Weights are very handy, otherwise our matrix would be huge, as we would have to replicate 
 each OD pair n times depending on the number of observations between them. Unfortunately, 
-there is no out of the box support for this in the current implementation.
+there is no out-of-the-box support for this in the current implementation.
 
 ```{r}
 # Prepare weights for each flow (here we use the count column)
@@ -121,8 +121,8 @@ wvec <- weight_vector(dmat, flows, weight_col = "count")
 ```
 
 Finally, cluster the flows using DBSCAN.  
-Adjust `eps` and `minPts` to control cluster tightness and minimum cluster size. Cluster composition is 
-greatly affected by these prameters. 
+Adjust `eps` and `minPts` to control cluster tightness and minimum cluster size.
+Cluster composition is determined by these DBSCAN parameters.
 
 ```{r}
 # Cluster flows using DBSCAN
