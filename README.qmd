@@ -55,9 +55,9 @@ library(tidyverse)
 library(sf)
 library(tmap)
 
-# Load sample flow data and project to metric CRS (e.g., EPSG:3857)
+# Load sample flow data and project to metric CRS (e.g., EPSG:27700)
 flows_sf <- flows_leeds
-flows_sf <- st_transform(flows_sf, 3857)
+flows_sf <- st_transform(flows_sf, "EPSG:27700")
 ```
 
 Next, add a column containing the length (in meters) of each flow line.  
