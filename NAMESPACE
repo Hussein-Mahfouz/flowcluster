@@ -3,6 +3,7 @@
 export(add_flow_length)
 export(add_xyuv)
 export(cluster_flows_dbscan)
+export(dbscan_sensitivity)
 export(distance_matrix)
 export(filter_by_length)
 export(flow_distance)

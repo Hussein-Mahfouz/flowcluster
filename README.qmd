@@ -21,8 +21,8 @@ default-image-extension: ""
 
 The goal of flowcluster is to provide minimal functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes:
 
-1. Creating distance matrices between OD pairs
-2. Passing distance matrices to a clustering algorithm
+1.  Creating distance matrices between OD pairs
+2.  Passing distance matrices to a clustering algorithm
 
 ## Install from GitHub
 
@@ -44,10 +44,9 @@ library(flowcluster)
 
 The package provides a function to create a distance matrix from a data frame of OD pairs, and then pass that matrix to a clustering algorithm. The current distance matrix is an implementation of the flow distance and flow dissimilarity measures described in [@tao2016spatial].
 
-
 ### Data preparation
 
-First, load the flowcluster package and the sample data, and project it to a [projected](https://r.geocompx.org/spatial-class#projected-coordinate-reference-systems) coordinate reference system (CRS).  
+First, load the flowcluster package and the sample data, and project it to a [projected](https://r.geocompx.org/spatial-class#projected-coordinate-reference-systems) coordinate reference system (CRS).\
 This is important for accurate length calculations and spatial operations.
 
 ```{r}
@@ -60,7 +59,7 @@ flows_sf <- flows_leeds
 flows_sf <- st_transform(flows_sf, "EPSG:27700")
 ```
 
-Next, add a column containing the length (in meters) of each flow line.  
+Next, add a column containing the length (in meters) of each flow line.\
 This step also checks that your data is in a projected CRS.
 
 ```{r}
@@ -69,15 +68,14 @@ flows_sf <- add_flow_length(flows_sf)
 head(flows_sf, 5)
 ```
 
-Filter out flows based on a minimum and maximum length.
-In the code below, we filter flows to keep only those between 1 and 20 kilometers.
+Filter out flows based on a minimum and maximum length. In the code below, we filter flows to keep only those between 1 and 20 kilometers.
 
 ```{r}
 # Filter flows based on length (e.g., between 100 and 10000 meters)
 flows_sf = filter_by_length(flows_sf, length_min = 1000, length_max = 20000)
 ```
 
-Then, extract start and end coordinates for each flow, and assign unique IDs.  
+Then, extract start and end coordinates for each flow, and assign unique IDs.\
 These are needed for subsequent distance calculations and clustering.
 
 ```{r}
@@ -88,7 +86,7 @@ head(flows_sf, 5)
 
 ### Distance Matrix calculation
 
-Calculate a pairwise distance measure between all flows using their coordinates.  
+Calculate a pairwise distance measure between all flows using their coordinates.\
 You can adjust `alpha` and `beta` to change the relative importance of start and end locations in the clustering process.
 
 ```{r}
@@ -107,25 +105,18 @@ dmat <- distance_matrix(distances, distance_col = "fds")
 head(dmat[1:2, 1:2])
 ```
 
-### Clustering 
+### Clustering
 
-Prepare a weight vector, typically based on a "count" column (number of trips, etc).  
-If your data does not have a "count" column, you can add one with `flows$count <- 1`. 
-Weights are very handy, otherwise our matrix would be huge, as we would have to replicate 
-each OD pair n times depending on the number of observations between them. Unfortunately, 
-there is no out-of-the-box support for adding weights in other clustering algorithms such
-as `hdbscan` or `optics`, so we will use {[dbscan](https://github.com/mhahsler/dbscan)} 
-for now, which does support weights.
-
+Prepare a weight vector, typically based on a "count" column (number of trips, etc).\
+If your data does not have a "count" column, you can add one with `flows$count <- 1`. Weights are very handy, otherwise our matrix would be huge, as we would have to replicate each OD pair n times depending on the number of observations between them. Unfortunately, there is no out-of-the-box support for adding weights in other clustering algorithms such as `hdbscan` or `optics`, so we will use {[dbscan](https://github.com/mhahsler/dbscan)} for now, which does support weights.
 
 ```{r}
 # Prepare weights for each flow (here we use the count column)
 wvec <- weight_vector(dmat, flows, weight_col = "count")
 ```
 
-Finally, cluster the flows using DBSCAN.  
-Adjust `eps` and `minPts` to control cluster tightness and minimum cluster size.
-Cluster composition is determined by these DBSCAN parameters.
+Finally, cluster the flows using DBSCAN.\
+Adjust `eps` and `minPts` to control cluster tightness and minimum cluster size. Cluster composition is determined by these DBSCAN parameters.
 
 ```{r}
 # Cluster flows using DBSCAN
@@ -144,10 +135,9 @@ flows_clustered |>
   arrange(desc(n))
 ```
 
-### Visualise 
+### Visualise
 
 Let's take a look at the clusters
-
 
 ```{r}
 # Keep only the biggest clusters for visualisation
@@ -163,7 +153,7 @@ flows_clustered = flows_clustered |>
 
 ```
 
-Add geometry back onto the data 
+Add geometry back onto the data
 
 ```{r}
 # Add the geometry back onto the data
@@ -171,8 +161,6 @@ flows_clustered = flows_sf |>
   select(flow_ID) |>
   inner_join(flows_clustered, by = "flow_ID") 
 ```
-
-
 
 ```{r}
 
@@ -217,13 +205,61 @@ tmap_save(tm = cluster_results, filename = "man/figures/cluster_results.png", wi
 
 ![](man/figures/cluster_results.png)
 
+The package also has a function to test different combinations of input parameters (`eps` and `minPts`) to see how the clustering changes. This can be useful for preliminary sensitivity analysis.
+
+```{r}
+
+sensitivity_results <- sensitivity_results <- dbscan_sensitivity(
+  flows = flows,
+  dist_mat = dmat,
+  options_epsilon <- c(0.5, 1,  2, 2.5, 4, 5, 7.5, 9),
+  options_minpts <- c(50, 75, 100, 150, 200, 300)
+  )
+
+# show the results
+head(sensitivity_results)
+
+# number of clusters with more than five od pairs:
+sensitivity_results %>%
+  filter(size > 5) %>%
+  group_by(id) %>%
+  summarise(no_of_clusters = n(),
+            total_count = sum(count_sum)) %>%
+  ungroup() %>%
+  arrange(desc(no_of_clusters))
+
+
+
+```
+
+Let's plot the output
+
+```{r}
+
+sensitivity_results %>%
+  filter(cluster != 0) %>%
+  group_by(id) %>%
+  mutate(clusters = n()) %>%
+  # How many clusters have more than 5 od pairs in them?
+  mutate(clusters = sum(size > 5)) %>%
+  ungroup() %>%
+  filter(clusters > 5) %>%
+  ggplot(aes(x = cluster, y = size, fill = count_sum)) +
+  geom_col() +
+  scale_y_continuous(trans='log10') +
+  facet_wrap(~id, scales = "fixed") +
+  labs(title = "Sensitivity analysis for clustering - Varying {eps} and {minPts}",
+       subtitle = "Parameter combinations that returned more than 1 cluster",
+       x = "Cluster no.",
+       y = "No. of od pairs in cluster",
+       fill= "No. of commuters") +
+ theme_minimal()
+
+```
 
 ## Future Work
 
-- [ ] Sensitivity function to show how clustering changes with different `eps` and `minPts` values
-- [ ] Add more distance matrices (e.g. Frechet distance)
-- [ ] Add more clustering algorithms, and use a more efficient data structure as a workaround for not being able 
-to use weights with other clustering algorithms
+-   [ ] Add more distance matrices (e.g. Frechet distance)
+-   [ ] Add more clustering algorithms, and use a more efficient data structure as a workaround for not being able to use weights with other clustering algorithms
 
 ## References
-
