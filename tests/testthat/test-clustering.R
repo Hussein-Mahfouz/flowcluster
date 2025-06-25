@@ -54,3 +54,23 @@ test_that("cluster_flows_dbscan: returns clusters", {
   expect_equal(nrow(res), nrow(flows))
   expect_type(res$cluster, "integer")
 })
+
+test_that("dbscan_sensitivity: runs without error", {
+  distances <- flow_distance(flows, alpha = 1, beta = 1)
+  mat <- distance_matrix(distances, distance_col = "fds")
+  wvec <- weight_vector(mat, flows, weight_col = "count")
+  
+  options_epsilon <- seq(1, 6, by = 2)
+  options_minpts <- seq(0, 150, by = 50)
+  
+  results <- dbscan_sensitivity(
+    dist_mat = mat,
+    flows = flows,
+    options_epsilon = options_epsilon,
+    options_minpts = options_minpts,
+    w_vec = wvec
+  )
+  # check that results is a dataframe and contains expected columns
+  expect_true(is.data.frame(results))
+  expect_true(all(c("id", "cluster", "size", "count_sum") %in% names(results)))
+})
