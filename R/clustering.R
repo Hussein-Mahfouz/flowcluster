@@ -165,6 +165,8 @@ cluster_flows_dbscan <- function(dist_mat, w_vec, x, eps, minPts) {
 #' # Calculate distance matrix
 #' distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
 #' dmat <- distance_matrix(distances)
+#' # Generate weight vector
+#' w_vec <- weight_vector(dmat, flows, weight_col = "count")
 #' 
 #' Define the parameters for sensitivity analysis
 #' options_epsilon <- seq(1, 10, by = 2)
@@ -175,8 +177,7 @@ cluster_flows_dbscan <- function(dist_mat, w_vec, x, eps, minPts) {
 #'    flows = flows,
 #'    options_epsilon = options_epsilon,
 #'    options_minpts = options_minpts,
-#'    weight_col = "count",
-#'    count_col = "count"  
+#'    w_vec = w_vec
 #'    )
 #' @export
 dbscan_sensitivity <- function(
