@@ -209,14 +209,15 @@ dbscan_sensitivity <- function(
     )
     
     cluster_res <- clustered_flows |>
-      dplyr::group_by(cluster) |>
+      dplyr::group_by(.data[["cluster"]]) |>
       dplyr::summarise(
         size = dplyr::n(),
         count_sum = sum(.data[["count"]], na.rm = TRUE),
         .groups = "drop"
       ) |>
       dplyr::mutate(id = sprintf("eps_%s_minpts_%s", options_parameters$eps[i], options_parameters$minpts[i])) |>
-      dplyr::relocate(id, cluster, size, count_sum)
+      dplyr::relocate(.data[["id"]], .data[["cluster"]], .data[["size"]], .data[["count_sum"]])
+    
     
     results[[i]] <- cluster_res
   }
