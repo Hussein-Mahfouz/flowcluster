@@ -358,15 +358,10 @@ sensitivity_results %>%
        x = "Cluster no.",
        y = "No. of od pairs in cluster",
        fill= "No. of commuters") +
- theme_minimal()
+ theme_bw()
 ```
 
 ![](README_files/figure-commonmark/unnamed-chunk-16-1.png)
-
-``` r
-# save the output
-ggsave("man/figures/sensitivity_results.png")
-```
 
 ![](man/figures/sensitivity_results.png)
 

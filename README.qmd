@@ -253,11 +253,14 @@ sensitivity_results %>%
        x = "Cluster no.",
        y = "No. of od pairs in cluster",
        fill= "No. of commuters") +
- theme_minimal()
+ theme_bw()
+```
 
-# save the output
+```{r}
+#| echo: false
+# save the ggplot output
 ggsave("man/figures/sensitivity_results.png")
-
+# load the saved plot
 ```
 
 ![](man/figures/sensitivity_results.png)
