@@ -253,13 +253,89 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <span><span class="va">cluster_results</span></span></code></pre></div>
 <p><img src="README_files/figure-commonmark/unnamed-chunk-13-1.png"></p>
 <p><img src="reference/figures/cluster_results.png"></p>
+<p>The package also has a function to test different combinations of input parameters (<code>eps</code> and <code>minPts</code>) to see how the clustering changes. This can be useful for preliminary sensitivity analysis.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sensitivity_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dbscan_sensitivity.html">dbscan_sensitivity</a></span><span class="op">(</span></span>
+<span>  flows <span class="op">=</span> <span class="va">flows</span>,</span>
+<span>  dist_mat <span class="op">=</span> <span class="va">dmat</span>,</span>
+<span>  <span class="va">options_epsilon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">9</span><span class="op">)</span>,</span>
+<span>  <span class="va">options_minpts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">75</span>, <span class="fl">100</span>, <span class="fl">150</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># show the results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sensitivity_results</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># A tibble: 6 × 4</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>  id              cluster  size count_sum</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>             <span class="er">&lt;</span>int<span class="sc">&gt;</span> <span class="er">&lt;</span>int<span class="sc">&gt;</span>     <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="dv">1</span> eps_1_minpts_50       <span class="dv">0</span>  <span class="dv">9274</span>     <span class="dv">80815</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="dv">2</span> eps_1_minpts_50       <span class="dv">1</span>     <span class="dv">1</span>       <span class="dv">366</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="dv">3</span> eps_1_minpts_50       <span class="dv">2</span>     <span class="dv">1</span>        <span class="dv">71</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="dv">4</span> eps_1_minpts_50       <span class="dv">3</span>     <span class="dv">1</span>        <span class="dv">61</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="dv">5</span> eps_1_minpts_50       <span class="dv">4</span>     <span class="dv">1</span>        <span class="dv">82</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="dv">6</span> eps_1_minpts_50       <span class="dv">5</span>     <span class="dv">1</span>       <span class="dv">342</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># number of clusters with more than five od pairs:</span></span>
+<span><span class="va">sensitivity_results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">size</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span>no_of_clusters <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            total_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">count_sum</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">no_of_clusters</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># A tibble: 20 × 3</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>   id                 no_of_clusters total_count</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>   <span class="sc">&lt;</span>chr<span class="sc">&gt;</span>                       <span class="er">&lt;</span>int<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a> <span class="dv">1</span> eps_7<span class="fl">.5</span>_minpts_50              <span class="dv">47</span>       <span class="dv">82404</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a> <span class="dv">2</span> eps_9_minpts_75                <span class="dv">47</span>       <span class="dv">98085</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a> <span class="dv">3</span> eps_9_minpts_50                <span class="dv">46</span>       <span class="dv">85491</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a> <span class="dv">4</span> eps_9_minpts_100               <span class="dv">28</span>      <span class="dv">105479</span></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a> <span class="dv">5</span> eps_7<span class="fl">.5</span>_minpts_75              <span class="dv">26</span>       <span class="dv">94718</span></span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a> <span class="dv">6</span> eps_7<span class="fl">.5</span>_minpts_100             <span class="dv">22</span>      <span class="dv">102502</span></span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a> <span class="dv">7</span> eps_9_minpts_150               <span class="dv">18</span>      <span class="dv">113117</span></span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a> <span class="dv">8</span> eps_7<span class="fl">.5</span>_minpts_150             <span class="dv">14</span>      <span class="dv">110810</span></span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a> <span class="dv">9</span> eps_5_minpts_50                 <span class="dv">6</span>       <span class="dv">80175</span></span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a><span class="dv">10</span> eps_5_minpts_75                 <span class="dv">4</span>       <span class="dv">93612</span></span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a><span class="dv">11</span> eps_5_minpts_100                <span class="dv">3</span>      <span class="dv">102246</span></span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a><span class="dv">12</span> eps_1_minpts_100                <span class="dv">1</span>      <span class="dv">102797</span></span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a><span class="dv">13</span> eps_1_minpts_150                <span class="dv">1</span>      <span class="dv">111862</span></span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a><span class="dv">14</span> eps_1_minpts_50                 <span class="dv">1</span>       <span class="dv">80815</span></span>
+<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a><span class="dv">15</span> eps_1_minpts_75                 <span class="dv">1</span>       <span class="dv">94111</span></span>
+<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a><span class="dv">16</span> eps_2_minpts_100                <span class="dv">1</span>      <span class="dv">102797</span></span>
+<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a><span class="dv">17</span> eps_2_minpts_150                <span class="dv">1</span>      <span class="dv">111862</span></span>
+<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a><span class="dv">18</span> eps_2_minpts_50                 <span class="dv">1</span>       <span class="dv">80815</span></span>
+<span id="cb25-22"><a href="#cb25-22" tabindex="-1"></a><span class="dv">19</span> eps_2_minpts_75                 <span class="dv">1</span>       <span class="dv">94111</span></span>
+<span id="cb25-23"><a href="#cb25-23" tabindex="-1"></a><span class="dv">20</span> eps_5_minpts_150                <span class="dv">1</span>      <span class="dv">111443</span></span></code></pre></div>
+<p>Let’s plot the output</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sensitivity_results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>clusters <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># How many clusters have more than 5 od pairs in them?</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>clusters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">size</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">clusters</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">cluster</span>, y <span class="op">=</span> <span class="va">size</span>, fill <span class="op">=</span> <span class="va">count_sum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_col</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">id</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Sensitivity analysis for clustering - Varying {eps} and {minPts}"</span>,</span>
+<span>       subtitle <span class="op">=</span> <span class="st">"Parameter combinations that returned more than 1 cluster"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Cluster no."</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"No. of od pairs in cluster"</span>,</span>
+<span>       fill<span class="op">=</span> <span class="st">"No. of \ncommuters"</span><span class="op">)</span> <span class="op">+</span></span>
+<span> <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="README_files/figure-commonmark/unnamed-chunk-16-1.png"></p>
+<div class="float">
+<img src="reference/figures/sensitivity_results.png" alt="Size and commuter count of detected clusters across DBSCAN parameter combinations. Each facet shows results for one {eps, minPts} setting; bar height represents the number of OD pairs in a cluster (log scale), and fill indicates the total count in that OD pair"><div class="figcaption">Size and commuter count of detected clusters across DBSCAN parameter combinations. Each facet shows results for one {eps, minPts} setting; bar height represents the number of OD pairs in a cluster (log scale), and fill indicates the total count in that OD pair</div>
+</div>
+<p>The plot shows the number of origin-destination pairs in each cluster. For each facet, each bar represents a cluster, and the height of the bar indicates the number of origin-destination pairs in that cluster. Many of the parameter (<code>minPts</code> and <code>eps</code>) combinations returned no clusters, and the combinations that did return clusters are shown in the plot. Depending on the analysis being done, you could proceed with the promising combinations, visualise them as done in the map above, and choose the one that makes the most sense to you.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="future-work">Future Work<a class="anchor" aria-label="anchor" href="#future-work"></a>
 </h2>
 <ul class="task-list">
-<li><label><input type="checkbox">Sensitivity function to show how clustering changes with different <code>eps</code> and <code>minPts</code> values</label></li>
 <li><label><input type="checkbox">Add more distance matrices (e.g. Frechet distance)</label></li>
 <li><label><input type="checkbox">Add more clustering algorithms, and use a more efficient data structure as a workaround for not being able to use weights with other clustering algorithms</label></li>
 </ul>
