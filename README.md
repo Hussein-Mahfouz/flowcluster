@@ -357,13 +357,26 @@ sensitivity_results %>%
        subtitle = "Parameter combinations that returned more than 1 cluster",
        x = "Cluster no.",
        y = "No. of od pairs in cluster",
-       fill= "No. of commuters") +
+       fill= "No. of \ncommuters") +
  theme_bw()
 ```
 
 ![](README_files/figure-commonmark/unnamed-chunk-16-1.png)
 
-![](man/figures/sensitivity_results.png)
+![Size and commuter count of detected clusters across DBSCAN parameter
+combinations. Each facet shows results for one {eps, minPts} setting;
+bar height represents the number of OD pairs in a cluster (log scale),
+and fill indicates the total count in that OD
+pair](man/figures/sensitivity_results.png)
+
+The plot shows the number of origin-destination pairs in each cluster.
+For each facet, each bar represents a cluster, and the height of the bar
+indicates the number of origin-destination pairs in that cluster. Many
+of the parameter (`minPts` and `eps`) combinations returned no clusters,
+and the combinations that did return clusters are shown in the plot.
+Depending on the analysis being done, you could proceed with the
+promising combinations, visualise them as done in the map above, and
+choose the one that makes the most sense to you.
 
 ## Future Work
 
