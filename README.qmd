@@ -255,9 +255,13 @@ sensitivity_results %>%
        fill= "No. of commuters") +
  theme_minimal()
 
+# save the output
+ggsave("man/figures/sensitivity_results.png")
+
 ```
 
 ![](man/figures/sensitivity_results.png)
+
 ## Future Work
 
 -   [ ] Add more distance matrices (e.g. Frechet distance)
