@@ -277,10 +277,109 @@ cluster_results
 
 ![](man/figures/cluster_results.png)
 
+The package also has a function to test different combinations of input
+parameters (`eps` and `minPts`) to see how the clustering changes. This
+can be useful for preliminary sensitivity analysis.
+
+``` r
+sensitivity_results <- dbscan_sensitivity(
+  flows = flows,
+  dist_mat = dmat,
+  options_epsilon <- c(1, 2, 5, 7.5, 9),
+  options_minpts <- c(50, 75, 100, 150)
+  )
+
+# show the results
+head(sensitivity_results)
+```
+
+    # A tibble: 6 × 4
+      id              cluster  size count_sum
+      <chr>             <int> <int>     <dbl>
+    1 eps_1_minpts_50       0  9274     80815
+    2 eps_1_minpts_50       1     1       366
+    3 eps_1_minpts_50       2     1        71
+    4 eps_1_minpts_50       3     1        61
+    5 eps_1_minpts_50       4     1        82
+    6 eps_1_minpts_50       5     1       342
+
+``` r
+# number of clusters with more than five od pairs:
+sensitivity_results %>%
+  filter(size > 5) %>%
+  group_by(id) %>%
+  summarise(no_of_clusters = n(),
+            total_count = sum(count_sum)) %>%
+  ungroup() %>%
+  arrange(desc(no_of_clusters))
+```
+
+    # A tibble: 20 × 3
+       id                 no_of_clusters total_count
+       <chr>                       <int>       <dbl>
+     1 eps_7.5_minpts_50              47       82404
+     2 eps_9_minpts_75                47       98085
+     3 eps_9_minpts_50                46       85491
+     4 eps_9_minpts_100               28      105479
+     5 eps_7.5_minpts_75              26       94718
+     6 eps_7.5_minpts_100             22      102502
+     7 eps_9_minpts_150               18      113117
+     8 eps_7.5_minpts_150             14      110810
+     9 eps_5_minpts_50                 6       80175
+    10 eps_5_minpts_75                 4       93612
+    11 eps_5_minpts_100                3      102246
+    12 eps_1_minpts_100                1      102797
+    13 eps_1_minpts_150                1      111862
+    14 eps_1_minpts_50                 1       80815
+    15 eps_1_minpts_75                 1       94111
+    16 eps_2_minpts_100                1      102797
+    17 eps_2_minpts_150                1      111862
+    18 eps_2_minpts_50                 1       80815
+    19 eps_2_minpts_75                 1       94111
+    20 eps_5_minpts_150                1      111443
+
+Let’s plot the output
+
+``` r
+sensitivity_results %>%
+  filter(cluster != 0) %>%
+  group_by(id) %>%
+  mutate(clusters = n()) %>%
+  # How many clusters have more than 5 od pairs in them?
+  mutate(clusters = sum(size > 5)) %>%
+  ungroup() %>%
+  filter(clusters > 5) %>%
+  ggplot(aes(x = cluster, y = size, fill = count_sum)) +
+  geom_col() +
+  scale_y_continuous(trans='log10') +
+  facet_wrap(~id, scales = "fixed") +
+  labs(title = "Sensitivity analysis for clustering - Varying {eps} and {minPts}",
+       subtitle = "Parameter combinations that returned more than 1 cluster",
+       x = "Cluster no.",
+       y = "No. of od pairs in cluster",
+       fill= "No. of \ncommuters") +
+ theme_bw()
+```
+
+![](README_files/figure-commonmark/unnamed-chunk-16-1.png)
+
+![Size and commuter count of detected clusters across DBSCAN parameter
+combinations. Each facet shows results for one {eps, minPts} setting;
+bar height represents the number of OD pairs in a cluster (log scale),
+and fill indicates the total count in that OD
+pair](man/figures/sensitivity_results.png)
+
+The plot shows the number of origin-destination pairs in each cluster.
+For each facet, each bar represents a cluster, and the height of the bar
+indicates the number of origin-destination pairs in that cluster. Many
+of the parameter (`minPts` and `eps`) combinations returned no clusters,
+and the combinations that did return clusters are shown in the plot.
+Depending on the analysis being done, you could proceed with the
+promising combinations, visualise them as done in the map above, and
+choose the one that makes the most sense to you.
+
 ## Future Work
 
-- [ ] Sensitivity function to show how clustering changes with different
-  `eps` and `minPts` values
 - [ ] Add more distance matrices (e.g. Frechet distance)
 - [ ] Add more clustering algorithms, and use a more efficient data
   structure as a workaround for not being able to use weights with other
