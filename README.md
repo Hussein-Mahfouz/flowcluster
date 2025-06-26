@@ -363,7 +363,7 @@ sensitivity_results %>%
 
 ![](README_files/figure-commonmark/unnamed-chunk-16-1.png)
 
-## Future Work
+![](man/figures/sensitivity_results.png) \## Future Work
 
 - [ ] Add more distance matrices (e.g. Frechet distance)
 - [ ] Add more clustering algorithms, and use a more efficient data

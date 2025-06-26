@@ -257,6 +257,7 @@ sensitivity_results %>%
 
 ```
 
+![](man/figures/sensitivity_results.png)
 ## Future Work
 
 -   [ ] Add more distance matrices (e.g. Frechet distance)
