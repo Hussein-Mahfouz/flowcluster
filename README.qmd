@@ -209,11 +209,11 @@ The package also has a function to test different combinations of input paramete
 
 ```{r}
 
-sensitivity_results <- sensitivity_results <- dbscan_sensitivity(
+sensitivity_results <- dbscan_sensitivity(
   flows = flows,
   dist_mat = dmat,
-  options_epsilon <- c(0.5, 1,  2, 2.5, 4, 5, 7.5, 9),
-  options_minpts <- c(50, 75, 100, 150, 200, 300)
+  options_epsilon <- c(0.5, 1,  2, 2.5, 5, 7.5, 9),
+  options_minpts <- c(50, 75, 100, 150, 200)
   )
 
 # show the results

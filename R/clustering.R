@@ -168,7 +168,7 @@ cluster_flows_dbscan <- function(dist_mat, w_vec, x, eps, minPts) {
 #' # Generate weight vector
 #' w_vec <- weight_vector(dmat, flows, weight_col = "count")
 #' 
-#' Define the parameters for sensitivity analysis
+#' # Define the parameters for sensitivity analysis
 #' options_epsilon <- seq(1, 10, by = 2)
 #' options_minpts <- seq(10, 100, by = 10)
 #' # # Run the sensitivity analysis
