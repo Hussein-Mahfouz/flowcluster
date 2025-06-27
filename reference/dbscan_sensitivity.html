@@ -84,7 +84,7 @@ to determine what parameter values make sense for your data</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">flows_leeds</span>, <span class="fl">3857</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">flows</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flows</span>, <span class="fl">1000</span><span class="op">)</span> <span class="co"># for testing</span></span></span>
+<span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flows</span>, <span class="fl">1000</span><span class="op">)</span> <span class="co"># for testing</span></span></span>
 <span class="r-in"><span><span class="co"># Add flow lengths and coordinates</span></span></span>
 <span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="add_flow_length.html">add_flow_length</a></span><span class="op">(</span><span class="va">flows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># filter by length</span></span></span>
@@ -107,12 +107,12 @@ to determine what parameter values make sense for your data</p>
 <span class="r-in"><span><span class="va">options_minpts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, by <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># # Run the sensitivity analysis</span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">dbscan_sensitivity</span><span class="op">(</span></span></span>
-<span class="r-in"><span>   dist_mat <span class="op">=</span> <span class="va">dmat</span>,</span></span>
-<span class="r-in"><span>   flows <span class="op">=</span> <span class="va">flows</span>,</span></span>
-<span class="r-in"><span>   options_epsilon <span class="op">=</span> <span class="va">options_epsilon</span>,</span></span>
-<span class="r-in"><span>   options_minpts <span class="op">=</span> <span class="va">options_minpts</span>,</span></span>
-<span class="r-in"><span>   w_vec <span class="op">=</span> <span class="va">w_vec</span></span></span>
-<span class="r-in"><span>   <span class="op">)</span></span></span>
+<span class="r-in"><span>  dist_mat <span class="op">=</span> <span class="va">dmat</span>,</span></span>
+<span class="r-in"><span>  flows <span class="op">=</span> <span class="va">flows</span>,</span></span>
+<span class="r-in"><span>  options_epsilon <span class="op">=</span> <span class="va">options_epsilon</span>,</span></span>
+<span class="r-in"><span>  options_minpts <span class="op">=</span> <span class="va">options_minpts</span>,</span></span>
+<span class="r-in"><span>  w_vec <span class="op">=</span> <span class="va">w_vec</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> running dbscan for option 1 of 50 : eps = 1 | minpts = 10</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> running dbscan for option 2 of 50 : eps = 1 | minpts = 20</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> running dbscan for option 3 of 50 : eps = 1 | minpts = 30</span>

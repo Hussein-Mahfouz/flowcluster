@@ -54,13 +54,14 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>distance matrix (tibble with rownames)</p>
+    <p>distance matrix (tibble with rownames). The matrix has flow_ID_a as rownames and flow_ID_b as column names.
+This function converts the output of <code><a href="flow_distance.html">flow_distance()</a></code> into a format suitable for the <a href="https://rdrr.io/pkg/dbscan/man/dbscan.html" class="external-link">dbscan</a> clustering algorithm.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">flows_leeds</span>, <span class="fl">3857</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">flows</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flows</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># for testing</span></span></span>
+<span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flows</span>, <span class="fl">100</span><span class="op">)</span> <span class="co"># for testing</span></span></span>
 <span class="r-in"><span><span class="co"># Add flow lengths and coordinates</span></span></span>
 <span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="add_flow_length.html">add_flow_length</a></span><span class="op">(</span><span class="va">flows</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="add_xyuv.html">add_xyuv</a></span><span class="op">(</span><span class="va">flows</span><span class="op">)</span></span></span>
