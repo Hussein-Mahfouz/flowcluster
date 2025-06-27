@@ -163,6 +163,7 @@ flows_clustered = flows_sf |>
 ```
 
 ```{r}
+#| output: false
 
 # plot
  tm_shape(flows_clustered) +
@@ -235,6 +236,7 @@ sensitivity_results %>%
 Let's plot the output
 
 ```{r}
+#| output: false
 
 sensitivity_results %>%
   filter(cluster != 0) %>%
