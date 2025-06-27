@@ -13,7 +13,7 @@
 
 
 #' Add Length Column to Flow Data
-#' 
+#'
 #' Also checks that 'origin' and 'destination' columns are present.
 #' @param x sf object of flows (LINESTRING, projected CRS)
 #' @return sf object with an additional length_m column (od length in meters)
@@ -42,8 +42,8 @@ add_flow_length <- function(x) {
 #' @export
 filter_by_length <- function(x, length_min = 0, length_max = Inf) {
   # check that both length_min and length_max are numeric values
-  if (!is.numeric(length_min) || !is.numeric(length_max) || 
-      length_min < 0 || length_max < 0) {
+  if (!is.numeric(length_min) || !is.numeric(length_max) ||
+    length_min < 0 || length_max < 0) {
     stop("Both length_min and length_max must be numeric positive values.")
   }
   # check that length_min is not greater than length_max
@@ -54,7 +54,7 @@ filter_by_length <- function(x, length_min = 0, length_max = Inf) {
   if (length_min < 0 || length_max < 0) {
     stop("Both length_min and length_max must be positive values.")
   }
-  # No flows should have length 0. If length_min is 0, we send a message and filter 
+  # No flows should have length 0. If length_min is 0, we send a message and filter
   # out any flows with length 0.
   if (length_min == 0) {
     message("Filtering out flows with length 0...")
@@ -63,8 +63,10 @@ filter_by_length <- function(x, length_min = 0, length_max = Inf) {
   # Filter flows by user specified length range
   x_filtered <- dplyr::filter(x, length_m >= length_min & length_m <= length_max)
   message(
-    glue::glue("Flows remaining after filtering: {nrow(x_filtered)} (",
-               round(nrow(x_filtered) / nrow(x) * 100, 2), "%)")
+    glue::glue(
+      "Flows remaining after filtering: {nrow(x_filtered)} (",
+      round(nrow(x_filtered) / nrow(x) * 100, 2), "%)"
+    )
   )
   x_filtered
 }
@@ -83,12 +85,12 @@ add_xyuv <- function(x) {
   message("Extracting start and end coordinates from flow geometries...")
   # Extract start and end points as sfc
   start_points <- lwgeom::st_startpoint(x$geometry)
-  end_points   <- lwgeom::st_endpoint(x$geometry)
-  
+  end_points <- lwgeom::st_endpoint(x$geometry)
+
   # Get coordinates
   start_coords <- sf::st_coordinates(start_points)
-  end_coords   <- sf::st_coordinates(end_points)
-  
+  end_coords <- sf::st_coordinates(end_points)
+
   # Add to data frame
   message("Adding x, y, u, v columns to flow data...")
   x$x <- start_coords[, "X"]
