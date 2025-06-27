@@ -35,7 +35,7 @@ to determine what parameter values make sense for your data
 }
 \examples{
 flows <- sf::st_transform(flows_leeds, 3857)
-flows = head(flows, 1000) # for testing
+flows <- head(flows, 1000) # for testing
 # Add flow lengths and coordinates
 flows <- add_flow_length(flows)
 # filter by length
@@ -53,10 +53,10 @@ options_epsilon <- seq(1, 10, by = 2)
 options_minpts <- seq(10, 100, by = 10)
 # # Run the sensitivity analysis
 results <- dbscan_sensitivity(
-   dist_mat = dmat,
-   flows = flows,
-   options_epsilon = options_epsilon,
-   options_minpts = options_minpts,
-   w_vec = w_vec
-   )
+  dist_mat = dmat,
+  flows = flows,
+  options_epsilon = options_epsilon,
+  options_minpts = options_minpts,
+  w_vec = w_vec
+)
 }

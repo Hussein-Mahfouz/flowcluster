@@ -20,7 +20,7 @@ Convert Long-Format Distance Tibble to Matrix
 }
 \examples{
 flows <- sf::st_transform(flows_leeds, 3857)
-flows = head(flows, 100) # for testing
+flows <- head(flows, 100) # for testing
 # Add flow lengths and coordinates
 flows <- add_flow_length(flows)
 flows <- add_xyuv(flows)
