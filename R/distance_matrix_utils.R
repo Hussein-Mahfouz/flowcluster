@@ -16,7 +16,7 @@
 #' 
 #' Also checks that 'origin' and 'destination' columns are present.
 #' @param x sf object of flows (LINESTRING, projected CRS)
-#' @return sf object with length_m column
+#' @return sf object with an additional length_m column (od length in meters)
 #' @examples
 #' flows <- sf::st_transform(flows_leeds, 3857)
 #' flows <- add_flow_length(flows)
@@ -34,7 +34,7 @@ add_flow_length <- function(x) {
 #' @param x sf object with length_m
 #' @param length_min minimum length (default 0)
 #' @param length_max maximum length (default Inf)
-#' @return filtered sf object
+#' @return filtered sf object. Flows with length_m outside the specified range are removed.
 #' @examples
 #' flows <- sf::st_transform(flows_leeds, 3857)
 #' flows <- add_flow_length(flows)

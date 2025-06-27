@@ -59,7 +59,8 @@ flow_distance <- function(x, alpha = 1, beta = 1) {
 #' Convert Long-Format Distance Tibble to Matrix
 #' @param distances tibble with columns flow_ID_a, flow_ID_b, and distance
 #' @param distance_col column name for distance (default "fds")
-#' @return distance matrix (tibble with rownames)
+#' @return distance matrix (tibble with rownames). The matrix has flow_ID_a as rownames and flow_ID_b as column names.
+#' This function converts the output of \code{flow_distance()} into a format suitable for the \link[dbscan]{dbscan} clustering algorithm.
 #' @examples
 #' flows <- sf::st_transform(flows_leeds, 3857)
 #' flows = head(flows, 100) # for testing
@@ -81,7 +82,8 @@ distance_matrix <- function(distances, distance_col = "fds") {
 #' @param dist_mat distance matrix
 #' @param x flows tibble with flow_ID and weight_col
 #' @param weight_col column to use as weights (default = "count")
-#' @return numeric weight vector
+#' @return numeric weight vector. Each element corresponds to a flow in the distance matrix, 
+#' and is used as a weight in the DBSCAN clustering algorithm.
 #' @examples
 #' flows <- sf::st_transform(flows_leeds, 3857)
 #' flows = head(flows, 100) # for testing
@@ -112,7 +114,7 @@ weight_vector <- function(dist_mat, x, weight_col = "count") {
 #' @param x flows tibble with flow_ID
 #' @param eps DBSCAN epsilon parameter
 #' @param minPts DBSCAN minPts parameter
-#' @return flows tibble with cluster column
+#' @return flows tibble with an additional cluster column
 #' @examples
 #' flows <- sf::st_transform(flows_leeds, 3857)
 #' flows = head(flows, 100) # for testing

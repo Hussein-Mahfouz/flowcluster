@@ -18,7 +18,7 @@ cluster_flows_dbscan(dist_mat, w_vec, x, eps, minPts)
 \item{minPts}{DBSCAN minPts parameter}
 }
 \value{
-flows tibble with cluster column
+flows tibble with an additional cluster column
 }
 \description{
 See \link[dbscan]{dbscan} for details on the DBSCAN algorithm.

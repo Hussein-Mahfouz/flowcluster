@@ -10,7 +10,7 @@ add_flow_length(x)
 \item{x}{sf object of flows (LINESTRING, projected CRS)}
 }
 \value{
-sf object with length_m column
+sf object with an additional length_m column (od length in meters)
 }
 \description{
 Also checks that 'origin' and 'destination' columns are present.
