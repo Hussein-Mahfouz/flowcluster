@@ -5,6 +5,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9)](https://codecov.io/gh/Hussein-Mahfouz/flowcluster)
 
 <!-- badges: end -->
 
