@@ -11,3 +11,4 @@
 ^\.data-raw$
 ^\.Rhistory$
 ^data-raw$
+^cran-comments\.md$

@@ -12,14 +12,15 @@ distance_matrix(distances, distance_col = "fds")
 \item{distance_col}{column name for distance (default "fds")}
 }
 \value{
-distance matrix (tibble with rownames)
+distance matrix (tibble with rownames). The matrix has flow_ID_a as rownames and flow_ID_b as column names.
+This function converts the output of \code{flow_distance()} into a format suitable for the \link[dbscan]{dbscan} clustering algorithm.
 }
 \description{
 Convert Long-Format Distance Tibble to Matrix
 }
 \examples{
 flows <- sf::st_transform(flows_leeds, 3857)
-flows = head(flows, 100) # for testing
+flows <- head(flows, 100) # for testing
 # Add flow lengths and coordinates
 flows <- add_flow_length(flows)
 flows <- add_xyuv(flows)

@@ -14,7 +14,7 @@ filter_by_length(x, length_min = 0, length_max = Inf)
 \item{length_max}{maximum length (default Inf)}
 }
 \value{
-filtered sf object
+filtered sf object. Flows with length_m outside the specified range are removed.
 }
 \description{
 Filter Flows by Length

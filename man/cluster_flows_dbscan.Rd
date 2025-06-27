@@ -18,14 +18,14 @@ cluster_flows_dbscan(dist_mat, w_vec, x, eps, minPts)
 \item{minPts}{DBSCAN minPts parameter}
 }
 \value{
-flows tibble with cluster column
+flows tibble with an additional cluster column
 }
 \description{
 See \link[dbscan]{dbscan} for details on the DBSCAN algorithm.
 }
 \examples{
 flows <- sf::st_transform(flows_leeds, 3857)
-flows = head(flows, 100) # for testing
+flows <- head(flows, 100) # for testing
 # Add flow lengths and coordinates
 flows <- add_flow_length(flows)
 # filter by length
