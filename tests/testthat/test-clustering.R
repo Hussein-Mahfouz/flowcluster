@@ -10,7 +10,7 @@ flows <- flows[1:1000, ]
 # Add length (meters) to each flow line
 flows <- add_flow_length(flows)
 # Filter flows based on length (e.g., between 100 and 10000 meters)
-flows <- filter_by_length(flows, length_min = 1000, length_max = 20000)
+flows = filter_by_length(flows, length_min = 1000, length_max = 20000)
 # Add x, y, u, v coordinates to flows
 flows <- add_xyuv(flows)
 
@@ -19,7 +19,7 @@ test_that("flow_distance: alpha/beta validation and output", {
   # Error if alpha/beta not positive or don't sum to 2
   expect_error(flow_distance(flows, alpha = -1, beta = 3), "Alpha and beta must be positive numbers")
   expect_error(flow_distance(flows, alpha = 1, beta = 0.5), "Alpha and beta must sum to 2")
-
+  
   # Works for valid arguments
   distances <- flow_distance(flows, alpha = 1, beta = 1)
   expect_true(is.data.frame(distances))
@@ -59,10 +59,10 @@ test_that("dbscan_sensitivity: runs without error", {
   distances <- flow_distance(flows, alpha = 1, beta = 1)
   mat <- distance_matrix(distances, distance_col = "fds")
   wvec <- weight_vector(mat, flows, weight_col = "count")
-
+  
   options_epsilon <- seq(1, 6, by = 2)
   options_minpts <- seq(0, 150, by = 50)
-
+  
   results <- dbscan_sensitivity(
     dist_mat = mat,
     flows = flows,

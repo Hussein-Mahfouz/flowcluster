@@ -1,7 +1,7 @@
-#' Example flow data for Leeds. It is from the 2021 census, and it contains all Origin - Destination
+#' Example flow data for Leeds. It is from the 2021 census, and it contains all Origin - Destination 
 #' flows at the MSOA level. For more info on census flow data, see the [ONS documentation](https://www.ons.gov.uk/census/aboutcensus/censusproducts/origindestinationflowdata)
 #' See data-raw/flows_leeds.R for how this data was created.
-#'
+#' 
 #' @format An object of class \code{\link[sf]{sf}} with LINESTRING geometry. It has the following columns:
 #' \describe{
 #'    \item{origin}{MSOA code of origin zone}
