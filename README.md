@@ -5,7 +5,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9)](https://codecov.io/gh/Hussein-Mahfouz/flowcluster)
+[![codecov](https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9)](https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster)
+<!-- [![codecov](https://codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9)](https://codecov.io/gh/Hussein-Mahfouz/flowcluster) -->
 
 <!-- badges: end -->
 
@@ -86,7 +87,7 @@ below, we filter flows to keep only those between 1 and 20 kilometers.
 
 ``` r
 # Filter flows based on length (e.g., between 100 and 10000 meters)
-flows_sf = filter_by_length(flows_sf, length_min = 1000, length_max = 20000)
+flows_sf <- filter_by_length(flows_sf, length_min = 1000, length_max = 20000)
 ```
 
 Then, extract start and end coordinates for each flow, and assign unique
@@ -123,7 +124,7 @@ start and end locations in the clustering process.
 
 ``` r
 # Compute pairwise flow distances (fd and fds columns)
-flows = st_drop_geometry(flows_sf)
+flows <- st_drop_geometry(flows_sf)
 distances <- flow_distance(flows, alpha = 1, beta = 1)
 ```
 
@@ -196,9 +197,9 @@ length(unique(flows_clustered$cluster))
 
 ``` r
 # number of flows in each cluster
-flows_clustered |> 
-  group_by(cluster) |> 
-  summarise(n = n()) |> 
+flows_clustered |>
+  group_by(cluster) |>
+  summarise(n = n()) |>
   arrange(desc(n))
 ```
 
@@ -223,58 +224,66 @@ Let’s take a look at the clusters
 
 ``` r
 # Keep only the biggest clusters for visualisation
-flows_clustered = flows_clustered |>
+flows_clustered <- flows_clustered |>
   filter(cluster != 0) |> # these are normally the noisepoints
   group_by(cluster) |>
-  mutate(size = n(), 
-         count_cluster = sum(count)) |>
+  mutate(
+    size = n(),
+    count_cluster = sum(count)
+  ) |>
   ungroup() |>
-  filter(size > 7, # minimum size of cluster
-         count_cluster > 100) # minumum number of trips in cluster
+  filter(
+    size > 7, # minimum size of cluster
+    count_cluster > 100
+  ) # minumum number of trips in cluster
 ```
 
 Add geometry back onto the data
 
 ``` r
 # Add the geometry back onto the data
-flows_clustered = flows_sf |>
+flows_clustered <- flows_sf |>
   select(flow_ID) |>
-  inner_join(flows_clustered, by = "flow_ID") 
+  inner_join(flows_clustered, by = "flow_ID")
 ```
 
 ``` r
 # plot
- tm_shape(flows_clustered) +
-  tm_lines(lwd = "count",
-           col = "cluster",
-           palette = "Accent", #YlGn
-           #style = "pretty",
-           alpha = 1,
-           title.col = "Cluster",
-           title.lwd = "No. of people",
-           scale = 10,
-           legend.col.show = FALSE,
-           showNA = FALSE) +
-  tm_facets(by = "cluster",
-            free.coords = FALSE,
-            nrow = 4,
-            showNA = FALSE) +
-  tm_layout(fontfamily = 'Georgia',
-            main.title = paste0("Clustered flows"),
-            main.title.size = 1.1,
-            main.title.color = "azure4",
-            main.title.position = "left",
-            legend.outside = TRUE,
-            legend.outside.position = "bottom",
-            legend.stack = "horizontal",
-            # remove panel headers
-            #panel.show = FALSE,
-            frame = FALSE) -> cluster_results
+tm_shape(flows_clustered) +
+  tm_lines(
+    lwd = "count",
+    col = "cluster",
+    palette = "Accent", # YlGn
+    # style = "pretty",
+    alpha = 1,
+    title.col = "Cluster",
+    title.lwd = "No. of people",
+    scale = 10,
+    legend.col.show = FALSE,
+    showNA = FALSE
+  ) +
+  tm_facets(
+    by = "cluster",
+    free.coords = FALSE,
+    nrow = 4,
+    showNA = FALSE
+  ) +
+  tm_layout(
+    fontfamily = "Georgia",
+    main.title = paste0("Clustered flows"),
+    main.title.size = 1.1,
+    main.title.color = "azure4",
+    main.title.position = "left",
+    legend.outside = TRUE,
+    legend.outside.position = "bottom",
+    legend.stack = "horizontal",
+    # remove panel headers
+    # panel.show = FALSE,
+    frame = FALSE
+  ) -> cluster_results
 
 cluster_results
 ```
-
-![](README_files/figure-commonmark/unnamed-chunk-13-1.png)
 
 ![](man/figures/cluster_results.png)
 
@@ -288,7 +297,7 @@ sensitivity_results <- dbscan_sensitivity(
   dist_mat = dmat,
   options_epsilon <- c(1, 2, 5, 7.5, 9),
   options_minpts <- c(50, 75, 100, 150)
-  )
+)
 
 # show the results
 head(sensitivity_results)
@@ -309,8 +318,10 @@ head(sensitivity_results)
 sensitivity_results %>%
   filter(size > 5) %>%
   group_by(id) %>%
-  summarise(no_of_clusters = n(),
-            total_count = sum(count_sum)) %>%
+  summarise(
+    no_of_clusters = n(),
+    total_count = sum(count_sum)
+  ) %>%
   ungroup() %>%
   arrange(desc(no_of_clusters))
 ```
@@ -352,17 +363,17 @@ sensitivity_results %>%
   filter(clusters > 5) %>%
   ggplot(aes(x = cluster, y = size, fill = count_sum)) +
   geom_col() +
-  scale_y_continuous(trans='log10') +
+  scale_y_continuous(trans = "log10") +
   facet_wrap(~id, scales = "fixed") +
-  labs(title = "Sensitivity analysis for clustering - Varying {eps} and {minPts}",
-       subtitle = "Parameter combinations that returned more than 1 cluster",
-       x = "Cluster no.",
-       y = "No. of od pairs in cluster",
-       fill= "No. of \ncommuters") +
- theme_bw()
+  labs(
+    title = "Sensitivity analysis for clustering - Varying {eps} and {minPts}",
+    subtitle = "Parameter combinations that returned more than 1 cluster",
+    x = "Cluster no.",
+    y = "No. of od pairs in cluster",
+    fill = "No. of \ncommuters"
+  ) +
+  theme_bw()
 ```
-
-![](README_files/figure-commonmark/unnamed-chunk-16-1.png)
 
 ![Size and commuter count of detected clusters across DBSCAN parameter
 combinations. Each facet shows results for one {eps, minPts} setting;
