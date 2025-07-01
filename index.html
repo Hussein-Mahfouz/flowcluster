@@ -105,7 +105,7 @@ This step also checks that your data is in a projected CRS.</p>
 <p>Filter out flows based on a minimum and maximum length. In the code below, we filter flows to keep only those between 1 and 20 kilometers.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter flows based on length (e.g., between 100 and 10000 meters)</span></span>
-<span><span class="va">flows_sf</span> <span class="op">=</span> <span class="fu"><a href="reference/filter_by_length.html">filter_by_length</a></span><span class="op">(</span><span class="va">flows_sf</span>, length_min <span class="op">=</span> <span class="fl">1000</span>, length_max <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">flows_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/filter_by_length.html">filter_by_length</a></span><span class="op">(</span><span class="va">flows_sf</span>, length_min <span class="op">=</span> <span class="fl">1000</span>, length_max <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span></code></pre></div>
 <p>Then, extract start and end coordinates for each flow, and assign unique IDs.<br>
 These are needed for subsequent distance calculations and clustering.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -134,7 +134,7 @@ These are needed for subsequent distance calculations and clustering.</p>
 You can adjust <code>alpha</code> and <code>beta</code> to change the relative importance of start and end locations in the clustering process.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute pairwise flow distances (fd and fds columns)</span></span>
-<span><span class="va">flows</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">flows_sf</span><span class="op">)</span></span>
+<span><span class="va">flows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">flows_sf</span><span class="op">)</span></span>
 <span><span class="va">distances</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/flow_distance.html">flow_distance</a></span><span class="op">(</span><span class="va">flows</span>, alpha <span class="op">=</span> <span class="fl">1</span>, beta <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>Convert the long-format distance table to a matrix, which is required for clustering.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -182,9 +182,9 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <div class="sourceCode" id="cb16"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">317</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># number of flows in each cluster</span></span>
-<span><span class="va">flows_clustered</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">summarise</span><span class="op">(</span>n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">flows_clustered</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span>n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb18"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># A tibble: 317 × 2</span></span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>   cluster     n</span>
@@ -207,51 +207,60 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <p>Let’s take a look at the clusters</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Keep only the biggest clusters for visualisation</span></span>
-<span><span class="va">flows_clustered</span> <span class="op">=</span> <span class="va">flows_clustered</span> <span class="op">|&gt;</span></span>
+<span><span class="va">flows_clustered</span> <span class="op">&lt;-</span> <span class="va">flows_clustered</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cluster</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co"># these are normally the noisepoints</span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>size <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>, </span>
-<span>         count_cluster <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    size <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    count_cluster <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">size</span> <span class="op">&gt;</span> <span class="fl">7</span>, <span class="co"># minimum size of cluster</span></span>
-<span>         <span class="va">count_cluster</span> <span class="op">&gt;</span> <span class="fl">100</span><span class="op">)</span> <span class="co"># minumum number of trips in cluster</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>    <span class="va">size</span> <span class="op">&gt;</span> <span class="fl">7</span>, <span class="co"># minimum size of cluster</span></span>
+<span>    <span class="va">count_cluster</span> <span class="op">&gt;</span> <span class="fl">100</span></span>
+<span>  <span class="op">)</span> <span class="co"># minumum number of trips in cluster</span></span></code></pre></div>
 <p>Add geometry back onto the data</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add the geometry back onto the data</span></span>
-<span><span class="va">flows_clustered</span> <span class="op">=</span> <span class="va">flows_sf</span> <span class="op">|&gt;</span></span>
+<span><span class="va">flows_clustered</span> <span class="op">&lt;-</span> <span class="va">flows_sf</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">flow_ID</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">inner_join</span><span class="op">(</span><span class="va">flows_clustered</span>, by <span class="op">=</span> <span class="st">"flow_ID"</span><span class="op">)</span> </span></code></pre></div>
+<span>  <span class="fu">inner_join</span><span class="op">(</span><span class="va">flows_clustered</span>, by <span class="op">=</span> <span class="st">"flow_ID"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot</span></span>
-<span> <span class="fu">tm_shape</span><span class="op">(</span><span class="va">flows_clustered</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">tm_lines</span><span class="op">(</span>lwd <span class="op">=</span> <span class="st">"count"</span>,</span>
-<span>           col <span class="op">=</span> <span class="st">"cluster"</span>,</span>
-<span>           palette <span class="op">=</span> <span class="st">"Accent"</span>, <span class="co">#YlGn</span></span>
-<span>           <span class="co">#style = "pretty",</span></span>
-<span>           alpha <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>           title.col <span class="op">=</span> <span class="st">"Cluster"</span>,</span>
-<span>           title.lwd <span class="op">=</span> <span class="st">"No. of people"</span>,</span>
-<span>           scale <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>           legend.col.show <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>           showNA <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">tm_facets</span><span class="op">(</span>by <span class="op">=</span> <span class="st">"cluster"</span>,</span>
-<span>            free.coords <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>            nrow <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>            showNA <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">tm_layout</span><span class="op">(</span>fontfamily <span class="op">=</span> <span class="st">'Georgia'</span>,</span>
-<span>            main.title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Clustered flows"</span><span class="op">)</span>,</span>
-<span>            main.title.size <span class="op">=</span> <span class="fl">1.1</span>,</span>
-<span>            main.title.color <span class="op">=</span> <span class="st">"azure4"</span>,</span>
-<span>            main.title.position <span class="op">=</span> <span class="st">"left"</span>,</span>
-<span>            legend.outside <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            legend.outside.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
-<span>            legend.stack <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
-<span>            <span class="co"># remove panel headers</span></span>
-<span>            <span class="co">#panel.show = FALSE,</span></span>
-<span>            frame <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">-&gt;</span> <span class="va">cluster_results</span></span>
+<span><span class="fu">tm_shape</span><span class="op">(</span><span class="va">flows_clustered</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_lines</span><span class="op">(</span></span>
+<span>    lwd <span class="op">=</span> <span class="st">"count"</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"cluster"</span>,</span>
+<span>    palette <span class="op">=</span> <span class="st">"Accent"</span>, <span class="co"># YlGn</span></span>
+<span>    <span class="co"># style = "pretty",</span></span>
+<span>    alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    title.col <span class="op">=</span> <span class="st">"Cluster"</span>,</span>
+<span>    title.lwd <span class="op">=</span> <span class="st">"No. of people"</span>,</span>
+<span>    scale <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    legend.col.show <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    showNA <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_facets</span><span class="op">(</span></span>
+<span>    by <span class="op">=</span> <span class="st">"cluster"</span>,</span>
+<span>    free.coords <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    showNA <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_layout</span><span class="op">(</span></span>
+<span>    fontfamily <span class="op">=</span> <span class="st">"Georgia"</span>,</span>
+<span>    main.title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Clustered flows"</span><span class="op">)</span>,</span>
+<span>    main.title.size <span class="op">=</span> <span class="fl">1.1</span>,</span>
+<span>    main.title.color <span class="op">=</span> <span class="st">"azure4"</span>,</span>
+<span>    main.title.position <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>    legend.outside <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    legend.outside.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>    legend.stack <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
+<span>    <span class="co"># remove panel headers</span></span>
+<span>    <span class="co"># panel.show = FALSE,</span></span>
+<span>    frame <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op">-&gt;</span> <span class="va">cluster_results</span></span>
 <span></span>
 <span><span class="va">cluster_results</span></span></code></pre></div>
-<p><img src="README_files/figure-commonmark/unnamed-chunk-13-1.png"></p>
 <p><img src="reference/figures/cluster_results.png"></p>
 <p>The package also has a function to test different combinations of input parameters (<code>eps</code> and <code>minPts</code>) to see how the clustering changes. This can be useful for preliminary sensitivity analysis.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
@@ -260,7 +269,7 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <span>  dist_mat <span class="op">=</span> <span class="va">dmat</span>,</span>
 <span>  <span class="va">options_epsilon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">7.5</span>, <span class="fl">9</span><span class="op">)</span>,</span>
 <span>  <span class="va">options_minpts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">75</span>, <span class="fl">100</span>, <span class="fl">150</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># show the results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sensitivity_results</span><span class="op">)</span></span></code></pre></div>
@@ -278,8 +287,10 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <span><span class="va">sensitivity_results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">size</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">summarise</span><span class="op">(</span>no_of_clusters <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>            total_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">count_sum</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    no_of_clusters <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    total_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">count_sum</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">no_of_clusters</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb25"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># A tibble: 20 × 3</span></span>
@@ -317,15 +328,16 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">clusters</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">cluster</span>, y <span class="op">=</span> <span class="va">size</span>, fill <span class="op">=</span> <span class="va">count_sum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_col</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>trans<span class="op">=</span><span class="st">'log10'</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>trans <span class="op">=</span> <span class="st">"log10"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">id</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Sensitivity analysis for clustering - Varying {eps} and {minPts}"</span>,</span>
-<span>       subtitle <span class="op">=</span> <span class="st">"Parameter combinations that returned more than 1 cluster"</span>,</span>
-<span>       x <span class="op">=</span> <span class="st">"Cluster no."</span>,</span>
-<span>       y <span class="op">=</span> <span class="st">"No. of od pairs in cluster"</span>,</span>
-<span>       fill<span class="op">=</span> <span class="st">"No. of \ncommuters"</span><span class="op">)</span> <span class="op">+</span></span>
-<span> <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="README_files/figure-commonmark/unnamed-chunk-16-1.png"></p>
+<span>  <span class="fu">labs</span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Sensitivity analysis for clustering - Varying {eps} and {minPts}"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Parameter combinations that returned more than 1 cluster"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Cluster no."</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"No. of od pairs in cluster"</span>,</span>
+<span>    fill <span class="op">=</span> <span class="st">"No. of \ncommuters"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="float">
 <img src="reference/figures/sensitivity_results.png" alt="Size and commuter count of detected clusters across DBSCAN parameter combinations. Each facet shows results for one {eps, minPts} setting; bar height represents the number of OD pairs in a cluster (log scale), and fill indicates the total count in that OD pair"><div class="figcaption">Size and commuter count of detected clusters across DBSCAN parameter combinations. Each facet shows results for one {eps, minPts} setting; bar height represents the number of OD pairs in a cluster (log scale), and fill indicates the total count in that OD pair</div>
 </div>
@@ -353,8 +365,9 @@ Tao, Ran, and Jean-Claude Thill. 2016. “Spatial Cluster Detection in Spatial F
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li>
+<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
 
@@ -378,7 +391,7 @@ Tao, Ran, and Jean-Claude Thill. 2016. “Spatial Cluster Detection in Spatial F
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/Hussein-Mahfouz/flowcluster" class="external-link"><img src="https://codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9" alt="codecov"></a></li>
+<li><a href="https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster" class="external-link"><img src="https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9" alt="codecov"></a></li>
 </ul>
 </div>
 
