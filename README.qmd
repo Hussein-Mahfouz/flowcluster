@@ -16,8 +16,8 @@ default-image-extension: ""
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9)](https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster)
-<!-- [![codecov](https://codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg?token=GK7XRON8X9)](https://codecov.io/gh/Hussein-Mahfouz/flowcluster) -->
+[![codecov](https://codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg)](https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster)
+[![CRAN status](https://www.r-pkg.org/badges/version/flowcluster)](https://cran.r-project.org/package=flowcluster)
 
 <!-- badges: end -->
 
@@ -26,15 +26,23 @@ The goal of flowcluster is to provide minimal functionality for clustering origi
 1.  Creating distance matrices between OD pairs
 2.  Passing distance matrices to a clustering algorithm
 
-## Install from GitHub
+## Installation
 
-You can install the development version of flowcluster from GitHub with:
+You can install the released version of `flowcluster` from [CRAN](https://CRAN.R-project.org/package=flowcluster) with:
+
+```{r}
+#| eval=FALSE
+install.packages("flowcluster")
+```
+
+And the development version from [GitHub](https://github.com/Hussein-Mahfouz/flowcluster) with:
 
 ```{r}
 #| eval=FALSE
 # install.packages("devtools")
 devtools::install_github("Hussein-Mahfouz/flowcluster")
 ```
+
 
 Load it as follows:
 
