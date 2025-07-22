@@ -52,7 +52,7 @@ library(flowcluster)
 
 ## Usage
 
-The package provides a function to create a distance matrix from a data frame of OD pairs, and then pass that matrix to a clustering algorithm. The current distance matrix is an implementation of the flow distance and flow dissimilarity measures described in [@tao2016spatial].
+The package provides a function to create a distance matrix from a data frame of OD pairs, and then pass that matrix to a clustering algorithm. The current distance matrix is an implementation of the flow distance and flow dissimilarity measures described in [@tao2016spatial]. See [@mahfouz2025flowcluster] for an example of how this package can be used to cluster flows for applied transportation research.
 
 ### Data preparation
 

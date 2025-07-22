@@ -7,27 +7,7 @@
 [![R-CMD-check](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Hussein-Mahfouz/flowcluster/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/Hussein-Mahfouz/flowcluster/graph/badge.svg)](https://app.codecov.io/gh/Hussein-Mahfouz/flowcluster)
 [![CRAN
-status](https://www.r-## References
-
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0">
-
-<div id="ref-mahfouz2025flowcluster" class="csl-entry">
-
-Mahfouz, Hussein, and Robin Lovelace. 2025. "flowcluster: An R package for clustering origin-destination flow data." *Journal of Urban Mobility* 5: 100135.
-<https://doi.org/10.1016/j.urbmob.2025.100135>.
-
-</div>
-
-<div id="ref-tao2016spatial" class="csl-entry">
-
-Tao, Ran, and Jean-Claude Thill. 2016. "Spatial Cluster Detection in
-Spatial Flow Data." *Geographical Analysis* 48 (4): 355–72.
-<https://doi.org/10.1111/gean.12100>.
-
-</div>
-
-</div>/version/flowcluster)](https://cran.r-project.org/package=flowcluster)
+status](https://www.r-pkg.org/badges/version/flowcluster)](https://cran.r-project.org/package=flowcluster)
 
 <!-- badges: end -->
 
@@ -66,9 +46,9 @@ library(flowcluster)
 The package provides a function to create a distance matrix from a data
 frame of OD pairs, and then pass that matrix to a clustering algorithm.
 The current distance matrix is an implementation of the flow distance
-and flow dissimilarity measures described in (Tao and Thill 2016).
-For more details on the flowcluster package implementation, see 
-(Mahfouz and Lovelace 2025).
+and flow dissimilarity measures described in (Tao and Thill 2016). See
+(Mahfouz et al. 2025) for an example of how this package can be used to
+cluster flows for applied transportation research.
 
 ### Data preparation
 
@@ -432,6 +412,15 @@ choose the one that makes the most sense to you.
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">
+
+<div id="ref-mahfouz2025flowcluster" class="csl-entry">
+
+Mahfouz, Hussein, Malcolm Morgan, Eva Heinen, and Robin Lovelace. 2025.
+“Delineating Potential DRT Operating Areas: An Origin–Destination
+Clustering Approach.” *Journal of Urban Mobility* 8 (December): 100135.
+<https://doi.org/10.1016/j.urbmob.2025.100135>.
+
+</div>
 
 <div id="ref-tao2016spatial" class="csl-entry">
 
