@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Cluster Origin-Destination Flow Data">
-<meta name="description" content="Provides functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes creating distance matrices between OD pairs and passing distance matrices to a clustering algorithm. See the academic paper Tao and Thill (2016) &lt;doi:10.1111/gean.12100&gt; for more details on spatial clustering of flows.">
-<meta property="og:description" content="Provides functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes creating distance matrices between OD pairs and passing distance matrices to a clustering algorithm. See the academic paper Tao and Thill (2016) &lt;doi:10.1111/gean.12100&gt; for more details on spatial clustering of flows.">
+<meta name="description" content="Provides functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes creating distance matrices between OD pairs and passing distance matrices to a clustering algorithm. See the academic paper Tao and Thill (2016) &lt;doi:10.1111/gean.12100&gt; for more details on spatial clustering of flows. See the paper on deliniating demand-responsive operating areas by Mahfouz et al. (2025) &lt;doi:10.1016/j.urbmob.2025.100135&gt; for an example of how this package can be used to cluster flows for applied transportation research.">
+<meta property="og:description" content="Provides functionality for clustering origin-destination (OD) pairs, representing desire lines (or flows). This includes creating distance matrices between OD pairs and passing distance matrices to a clustering algorithm. See the academic paper Tao and Thill (2016) &lt;doi:10.1111/gean.12100&gt; for more details on spatial clustering of flows. See the paper on deliniating demand-responsive operating areas by Mahfouz et al. (2025) &lt;doi:10.1016/j.urbmob.2025.100135&gt; for an example of how this package can be used to cluster flows for applied transportation research.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -74,7 +74,7 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>The package provides a function to create a distance matrix from a data frame of OD pairs, and then pass that matrix to a clustering algorithm. The current distance matrix is an implementation of the flow distance and flow dissimilarity measures described in (Tao and Thill 2016).</p>
+<p>The package provides a function to create a distance matrix from a data frame of OD pairs, and then pass that matrix to a clustering algorithm. The current distance matrix is an implementation of the flow distance and flow dissimilarity measures described in (Tao and Thill 2016). See (Mahfouz et al. 2025) for an example of how this package can be used to cluster flows for applied transportation research.</p>
 <div class="section level3">
 <h3 id="data-preparation">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a>
 </h3>
@@ -361,6 +361,9 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-mahfouz2025flowcluster" class="csl-entry">
+Mahfouz, Hussein, Malcolm Morgan, Eva Heinen, and Robin Lovelace. 2025. “Delineating Potential DRT Operating Areas: An Origin–Destination Clustering Approach.” <em>Journal of Urban Mobility</em> 8 (December): 100135. <a href="https://doi.org/10.1016/j.urbmob.2025.100135" class="external-link uri">https://doi.org/10.1016/j.urbmob.2025.100135</a>.
+</div>
 <div id="ref-tao2016spatial" class="csl-entry">
 Tao, Ran, and Jean-Claude Thill. 2016. “Spatial Cluster Detection in Spatial Flow Data.” <em>Geographical Analysis</em> 48 (4): 355–72. <a href="https://doi.org/10.1111/gean.12100" class="external-link uri">https://doi.org/10.1111/gean.12100</a>.
 </div>
