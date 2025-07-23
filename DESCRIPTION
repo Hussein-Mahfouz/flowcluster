@@ -13,6 +13,10 @@ Description: Provides functionality for clustering
     distance matrices to a clustering algorithm. See the academic paper 
     Tao and Thill (2016) <doi:10.1111/gean.12100>
     for more details on spatial clustering of flows.
+    See the paper on deliniating demand-responsive operating areas
+    by Mahfouz et al. (2025) <doi:10.1016/j.urbmob.2025.100135>
+    for an example of how this package can be used to cluster flows for
+    applied transportation research.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

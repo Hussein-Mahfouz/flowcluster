@@ -46,7 +46,9 @@ library(flowcluster)
 The package provides a function to create a distance matrix from a data
 frame of OD pairs, and then pass that matrix to a clustering algorithm.
 The current distance matrix is an implementation of the flow distance
-and flow dissimilarity measures described in (Tao and Thill 2016).
+and flow dissimilarity measures described in (Tao and Thill 2016). See
+(Mahfouz et al. 2025) for an example of how this package can be used to
+cluster flows for applied transportation research.
 
 ### Data preparation
 
@@ -410,6 +412,15 @@ choose the one that makes the most sense to you.
 
 <div id="refs" class="references csl-bib-body hanging-indent"
 entry-spacing="0">
+
+<div id="ref-mahfouz2025flowcluster" class="csl-entry">
+
+Mahfouz, Hussein, Malcolm Morgan, Eva Heinen, and Robin Lovelace. 2025.
+“Delineating Potential DRT Operating Areas: An Origin–Destination
+Clustering Approach.” *Journal of Urban Mobility* 8 (December): 100135.
+<https://doi.org/10.1016/j.urbmob.2025.100135>.
+
+</div>
 
 <div id="ref-tao2016spatial" class="csl-entry">
 
