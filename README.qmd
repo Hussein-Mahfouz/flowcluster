@@ -287,6 +287,58 @@ ggsave("man/figures/sensitivity_results.png")
 
 The plot shows the number of origin-destination pairs in each cluster. For each facet, each bar represents a cluster, and the height of the bar indicates the number of origin-destination pairs in that cluster. Many of the parameter (`minPts` and `eps`) combinations returned no clusters, and the combinations that did return clusters are shown in the plot. Depending on the analysis being done, you could proceed with the promising combinations, visualise them as done in the map above, and choose the one that makes the most sense to you.
 
+## Aggregating clustered desire lines
+
+```{r}
+names(flows_clustered)
+flows_aggregated <- flows_clustered |>
+  group_by(cluster) |>
+  summarise(
+    count_total = sum(count),
+    size = first(size),
+    x = weighted.mean(x, count),
+    y = weighted.mean(y, count),
+    u = weighted.mean(u, count),
+    v = weighted.mean(v, count)
+  )
+# Demo how to create a linestring for the first aggreged OD pair:
+flows_aggregated_sf_1 <- sf::st_sfc(
+  sf::st_linestring(rbind(
+    c(flows_aggregated$x[1], flows_aggregated$y[1]),
+    c(flows_aggregated$u[1], flows_aggregated$v[1])
+  )),
+  crs = sf::st_crs(flows_aggregated)
+)
+mapview::mapview(flows_aggregated_sf_1)
+# Create a function to create linestrings in this way:
+create_linestring <- function(aggregated_data) {
+  sf::st_linestring(rbind(
+    c(aggregated_data$x, aggregated_data$y),
+    c(aggregated_data$u, aggregated_data$v)
+  ))
+}
+# Function to do on all OD pairs with lapply:
+aggregated_data <- flows_aggregated
+create_linestrings <- function(aggregated_data) {
+  linestrings <-lapply(1:nrow(aggregated_data), function(i) {
+    create_linestring(aggregated_data[i, ])
+  })
+  linestrings_sfc <- sf::st_sfc(linestrings)
+  sf::st_sf(
+    aggregated_data,
+    geometry = linestrings_sfc
+  )
+}
+# Test it works:
+flows_aggregated_sfc <- create_linestrings(flows_aggregated)
+tm_shape(flows_aggregated_sfc) +
+  tm_lines(
+    lwd = "count_total",
+    scale = 9
+  )
+
+```
+
 ## Future Work
 
 -   [ ] Add more distance matrices (e.g. Frechet distance)
