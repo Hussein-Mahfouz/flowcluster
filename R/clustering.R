@@ -150,7 +150,9 @@ cluster_flows_dbscan <- function(dist_mat, w_vec, x, eps, minPts) {
 }
 
 
-#' Sensitivity analysis of DBSCAN parameters for flow clustering. The function allows you to test
+#' Sensitivity analysis of DBSCAN parameters for flow clustering. 
+#' 
+#' The function allows you to test
 #' different combinations of epsilon and minPts parameters for clustering flows using DBSCAN. It can be used
 #' to determine what parameter values make sense for your data
 #'

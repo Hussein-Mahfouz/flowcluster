@@ -66,7 +66,7 @@ library(tmap)
 
 # Load sample flow data and project to metric CRS (e.g., EPSG:27700)
 flows_sf <- flows_leeds
-flows_sf <- st_transform(flows_sf, "EPSG:27700")
+flows_sf <- st_transform(flows_sf, "EPSG:27700") 
 ```
 
 Next, add a column containing the length (in meters) of each flow line.\
@@ -286,6 +286,81 @@ ggsave("man/figures/sensitivity_results.png")
 ![Size and commuter count of detected clusters across DBSCAN parameter combinations. Each facet shows results for one {eps, minPts} setting; bar height represents the number of OD pairs in a cluster (log scale), and fill indicates the total count in that OD pair](man/figures/sensitivity_results.png)
 
 The plot shows the number of origin-destination pairs in each cluster. For each facet, each bar represents a cluster, and the height of the bar indicates the number of origin-destination pairs in that cluster. Many of the parameter (`minPts` and `eps`) combinations returned no clusters, and the combinations that did return clusters are shown in the plot. Depending on the analysis being done, you could proceed with the promising combinations, visualise them as done in the map above, and choose the one that makes the most sense to you.
+
+## Aggregating clustered desire lines
+
+After clustering, you may want to aggregate the flows in each cluster into a single line representing the average flow direction and magnitude. This can be useful for visualisation or further analysis. The package has a function to do this, which creates a linestring for each cluster based on the average start and end coordinates of the flows in that cluster.
+
+```{r}
+# Aggregate clustered flows into single linesting per cluster
+flows_aggregated <- aggregate_clustered_flows(flows_clustered,
+                                              weight = "count")
+
+# View the first few rows of the aggregated flows
+head(flows_aggregated, 5)
+
+```
+
+Let's visualise the aggregated flows overlaid on the original flows.
+
+```{r}
+#| output: false
+
+tm_shape(flows_clustered) +
+  tm_lines(
+    lwd = "count",
+    col = "grey30",
+    alpha = 0.7,
+    title.lwd = "No. of people (Original flows)",
+    scale = 10,
+    legend.col.show = FALSE,
+    showNA = FALSE
+  ) +
+  tm_facets(
+    by = "cluster",
+    free.coords = FALSE,
+    nrow = 4,
+    showNA = FALSE) +
+tm_shape(flows_aggregated) +
+  tm_lines(
+    lwd = "count_total",
+    col = "red",
+    palette = "Accent", # YlGn
+    alpha = 1,
+    title.col = "Cluster",
+    title.lwd = "No. of people (Representative linestring)",
+    scale = 10,
+    legend.outside = TRUE,
+    legend.outside.position = "bottom"
+  ) +
+  tm_facets(
+    by = "cluster",
+    free.coords = FALSE,
+    nrow = 4,
+    showNA = FALSE) +
+  tm_layout(
+    fontfamily = "Georgia",
+    main.title = paste0("Aggregating flows to representative linestrings per cluster"),
+    main.title.size = 1.1,
+    main.title.color = "azure4",
+    main.title.position = "left",
+    legend.outside = TRUE,
+    legend.outside.position = "bottom",
+    legend.stack = "horizontal",
+  ) -> flows_aggregated_map
+
+flows_aggregated_map
+
+```
+
+```{r}
+#| echo: false
+# save the tmap output
+tmap_save(tm = flows_aggregated_map, filename = "man/figures/cluster_aggregated_results.png", width = 8, dpi = 1080, asp = 0)
+# load the saved map
+```
+
+![](man/figures/cluster_aggregated_results.png)
 
 ## Future Work
 

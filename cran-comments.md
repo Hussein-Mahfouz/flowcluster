@@ -1,16 +1,11 @@
-## Resubmission
-This is a resubmission of `flowcluster` version 0.1.0.
+## Submission Notes
+
+This is a regular update for flowcluster.
+
+In this version, I have added a new feature:
+
+* Added the `aggregate_clustered_flows()` function to create representative lines from flow clusters.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
-
-## Previous submission NOTEs
-This resubmission addresses all NOTEs from the prior submission:
-
-1. The `License` field in DESCRIPTION is now `MIT + file LICENSE` as required for template licenses.
-2.  The `README_files` directory has been added to `.Rbuildignore`.
-3.  An `inst/WORDLIST` file has been added to address the spelling false positive.
-4.  Regarding the URL check NOTE (`Could not resolve hostname`): I have confirmed the URL is correct and publicly accessible.
-
-Thank you for your consideration.
+There were 0 ERRORs, 0 WARNINGs, and 0 NOTEs.

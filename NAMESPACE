@@ -2,6 +2,7 @@
 
 export(add_flow_length)
 export(add_xyuv)
+export(aggregate_clustered_flows)
 export(cluster_flows_dbscan)
 export(dbscan_sensitivity)
 export(distance_matrix)

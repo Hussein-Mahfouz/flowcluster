@@ -2,9 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{dbscan_sensitivity}
 \alias{dbscan_sensitivity}
-\title{Sensitivity analysis of DBSCAN parameters for flow clustering. The function allows you to test
-different combinations of epsilon and minPts parameters for clustering flows using DBSCAN. It can be used
-to determine what parameter values make sense for your data}
+\title{Sensitivity analysis of DBSCAN parameters for flow clustering.}
 \usage{
 dbscan_sensitivity(
   dist_mat,
@@ -29,7 +27,7 @@ dbscan_sensitivity(
 a tibble with columns: id (to identify eps and minpts), cluster, size (number of desire lines in cluster), count_sum (total count per cluster)
 }
 \description{
-Sensitivity analysis of DBSCAN parameters for flow clustering. The function allows you to test
+The function allows you to test
 different combinations of epsilon and minPts parameters for clustering flows using DBSCAN. It can be used
 to determine what parameter values make sense for your data
 }

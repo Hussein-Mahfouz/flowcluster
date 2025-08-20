@@ -1,6 +1,6 @@
 Package: flowcluster
 Title: Cluster Origin-Destination Flow Data
-Version: 0.1.0.9000
+Version: 0.2.0
 Authors@R: c(
     person("Hussein", "Mahfouz", email = "husseinmahfouz93@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-1706-7802")),
@@ -30,11 +30,14 @@ Imports:
     dplyr,
     glue,
     lwgeom,
+    purrr,
+    rlang,
     tibble,
     units,
     tidyr,
     tidyselect
 LazyData: true
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tmap
 Config/testthat/edition: 3
