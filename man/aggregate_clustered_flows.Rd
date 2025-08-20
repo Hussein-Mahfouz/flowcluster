@@ -32,3 +32,87 @@ computed as weighted averages (weighted by flow counts or another variable),
 or simple means if no weights are provided. Each cluster is represented
 by one \code{LINESTRING}.
 }
+\examples{
+# ----- 1. Prepare the data
+
+flows <- sf::st_transform(flows_leeds, 3857)
+# Add flow lengths and coordinates
+flows <- add_flow_length(flows)
+# filter by length
+flows <- filter_by_length(flows, length_min = 5000, length_max = 12000)
+flows <- add_xyuv(flows)
+# Calculate distances
+distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
+dmat <- distance_matrix(distances)
+wvec <- weight_vector(dmat, flows, weight_col = "count")
+
+# Cluster flows using DBSCAN
+flows_clustered <- cluster_flows_dbscan(dmat, wvec, flows, eps = 8, minPts = 70)
+
+# Filter out noise points and small clusters. Calculate size and count per cluster
+flows_clustered <- flows_clustered |>
+  dplyr::filter(cluster != 0) |> # these are normally the noisepoints
+  dplyr::group_by(cluster) |>
+  dplyr::mutate(size = dplyr::n(),
+         count_cluster = sum(count)) |>
+  dplyr::ungroup() |>
+  # Filter out small clusters
+  dplyr::filter(size > 7, # minimum size of cluster
+                count_cluster > 100) # minumum number of trips in cluster
+         
+# ----- 2. Aggregation code
+
+# Weighted aggregation (by flow counts)
+flows_agg_w <- aggregate_clustered_flows(flows_clustered, weight = "count")
+head(flows_agg_w)
+
+# Unweighted aggregation
+flows_agg_uw <- aggregate_clustered_flows(flows_clustered)
+head(flows_agg_uw)
+
+# ----- 3. Visualize the output ---
+if (requireNamespace("tmap", quietly = TRUE)) {
+  library(tmap)
+
+tm_shape(flows_clustered) +
+  tm_lines(
+  lwd = "count",
+  col = "grey30",
+  alpha = 0.7,
+  title.lwd = "No. of people (Original flows)",
+  scale = 10,
+  legend.col.show = FALSE,
+  showNA = FALSE) +
+tm_facets(
+  by = "cluster",
+  free.coords = FALSE,
+  nrow = 4,
+  showNA = FALSE) +
+tm_shape(flows_agg_w) +
+tm_lines(
+  lwd = "count_total",
+  col = "red",
+  palette = "Accent", # YlGn
+  alpha = 1,
+  title.col = "Cluster",
+  title.lwd = "No. of people (Representative linestring)",
+  scale = 10,
+  legend.outside = TRUE,
+  legend.outside.position = "bottom") +
+ tm_facets(
+   by = "cluster",
+   free.coords = FALSE,
+   nrow = 4,
+   showNA = FALSE) +
+ tm_layout(
+   fontfamily = "Georgia",
+   main.title = "Aggregating flows to representative linestrings per cluster",
+   main.title.size = 1.1,
+   main.title.color = "azure4",
+   main.title.position = "left",
+   legend.outside = TRUE,
+   legend.outside.position = "bottom",
+   legend.stack = "horizontal",
+  ) 
+ }
+}

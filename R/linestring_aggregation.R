@@ -22,7 +22,6 @@
 #' }
 #'
 #' @examples
-#' 
 #' # ----- 1. Prepare the data
 #' 
 #' flows <- sf::st_transform(flows_leeds, 3857)
@@ -36,10 +35,10 @@
 #' dmat <- distance_matrix(distances)
 #' wvec <- weight_vector(dmat, flows, weight_col = "count")
 #' 
-#' #' # Cluster flows using DBSCAN
+#' # Cluster flows using DBSCAN
 #' flows_clustered <- cluster_flows_dbscan(dmat, wvec, flows, eps = 8, minPts = 70)
 #' 
-#' #' # Filter out noise points and small clusters. Calculate size and count per cluster
+#' # Filter out noise points and small clusters. Calculate size and count per cluster
 #' flows_clustered <- flows_clustered |>
 #'   dplyr::filter(cluster != 0) |> # these are normally the noisepoints
 #'   dplyr::group_by(cluster) |>
@@ -78,7 +77,7 @@
 #'   free.coords = FALSE,
 #'   nrow = 4,
 #'   showNA = FALSE) +
-#' tm_shape(flows_aggregated) +
+#' tm_shape(flows_agg_w) +
 #' tm_lines(
 #'   lwd = "count_total",
 #'   col = "red",
@@ -96,14 +95,15 @@
 #'    showNA = FALSE) +
 #'  tm_layout(
 #'    fontfamily = "Georgia",
-#'    main.title = paste0("Aggregating flows to representative linestrings per cluster"),
+#'    main.title = "Aggregating flows to representative linestrings per cluster",
 #'    main.title.size = 1.1,
 #'    main.title.color = "azure4",
 #'    main.title.position = "left",
 #'    legend.outside = TRUE,
 #'    legend.outside.position = "bottom",
 #'    legend.stack = "horizontal",
-#'  ) 
+#'   ) 
+#'  }
 #' @export
 aggregate_clustered_flows <- function(flows, weight = NULL, crs = sf::st_crs(flows)) {
   
