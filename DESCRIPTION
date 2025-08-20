@@ -39,5 +39,5 @@ Imports:
 LazyData: true
 Suggests: 
     testthat (>= 3.0.0),
-    tmap (<= 3.3.4)
+    tmap
 Config/testthat/edition: 3
