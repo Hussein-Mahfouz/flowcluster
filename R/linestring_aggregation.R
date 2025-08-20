@@ -46,8 +46,8 @@
 #'          count_cluster = sum(count)) |>
 #'   dplyr::ungroup() |>
 #'   # Filter out small clusters
-#'   dplyr::filter(size > 7, # minimum size of cluster
-#'                 count_cluster > 100) # minumum number of trips in cluster
+#'   dplyr::filter(size > 10, # minimum size of cluster
+#'                 count_cluster > 120) # minumum number of trips in cluster
 #'          
 #' # ----- 2. Aggregation code
 #' 
