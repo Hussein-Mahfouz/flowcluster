@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">flowcluster</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,7 @@ This is important for accurate length calculations and spatial operations.</p>
 <span></span>
 <span><span class="co"># Load sample flow data and project to metric CRS (e.g., EPSG:27700)</span></span>
 <span><span class="va">flows_sf</span> <span class="op">&lt;-</span> <span class="va">flows_leeds</span></span>
-<span><span class="va">flows_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">flows_sf</span>, <span class="st">"EPSG:27700"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">flows_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">flows_sf</span>, <span class="st">"EPSG:27700"</span><span class="op">)</span> </span></code></pre></div>
 <p>Next, add a column containing the length (in meters) of each flow line.<br>
 This step also checks that your data is in a projected CRS.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -232,8 +232,8 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <span>  <span class="fu">inner_join</span><span class="op">(</span><span class="va">flows_clustered</span>, by <span class="op">=</span> <span class="st">"flow_ID"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot</span></span>
-<span><span class="fu">tm_shape</span><span class="op">(</span><span class="va">flows_clustered</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">tm_lines</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">flows_clustered</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span></span>
 <span>    lwd <span class="op">=</span> <span class="st">"count"</span>,</span>
 <span>    col <span class="op">=</span> <span class="st">"cluster"</span>,</span>
 <span>    palette <span class="op">=</span> <span class="st">"Accent"</span>, <span class="co"># YlGn</span></span>
@@ -245,13 +245,13 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 <span>    legend.col.show <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    showNA <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">tm_facets</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_facets.html" class="external-link">tm_facets</a></span><span class="op">(</span></span>
 <span>    by <span class="op">=</span> <span class="st">"cluster"</span>,</span>
 <span>    free.coords <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>    nrow <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>    showNA <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">tm_layout</span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html" class="external-link">tm_layout</a></span><span class="op">(</span></span>
 <span>    fontfamily <span class="op">=</span> <span class="st">"Georgia"</span>,</span>
 <span>    main.title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Clustered flows"</span><span class="op">)</span>,</span>
 <span>    main.title.size <span class="op">=</span> <span class="fl">1.1</span>,</span>
@@ -348,6 +348,79 @@ Adjust <code>eps</code> and <code>minPts</code> to control cluster tightness and
 </div>
 <p>The plot shows the number of origin-destination pairs in each cluster. For each facet, each bar represents a cluster, and the height of the bar indicates the number of origin-destination pairs in that cluster. Many of the parameter (<code>minPts</code> and <code>eps</code>) combinations returned no clusters, and the combinations that did return clusters are shown in the plot. Depending on the analysis being done, you could proceed with the promising combinations, visualise them as done in the map above, and choose the one that makes the most sense to you.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="aggregating-clustered-desire-lines">Aggregating clustered desire lines<a class="anchor" aria-label="anchor" href="#aggregating-clustered-desire-lines"></a>
+</h2>
+<p>After clustering, you may want to aggregate the flows in each cluster into a single line representing the average flow direction and magnitude. This can be useful for visualisation or further analysis. The package has a function to do this, which creates a linestring for each cluster based on the average start and end coordinates of the flows in that cluster.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Aggregate clustered flows into single linesting per cluster</span></span>
+<span><span class="va">flows_aggregated</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/aggregate_clustered_flows.html">aggregate_clustered_flows</a></span><span class="op">(</span><span class="va">flows_clustered</span>,</span>
+<span>                                              weight <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># View the first few rows of the aggregated flows</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">flows_aggregated</span>, <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>Simple feature collection with <span class="dv">5</span> features and <span class="dv">7</span> fields</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>Geometry type<span class="sc">:</span> LINESTRING</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>Dimension<span class="sc">:</span>     XY</span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>Bounding box<span class="sc">:</span>  xmin<span class="sc">:</span> <span class="dv">420075</span> ymin<span class="sc">:</span> <span class="fl">433392.3</span> xmax<span class="sc">:</span> <span class="fl">442341.2</span> ymax<span class="sc">:</span> <span class="fl">448073.4</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>Projected CRS<span class="sc">:</span> OSGB36 <span class="sc">/</span> British National Grid</span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a><span class="co"># A tibble: 5 × 8</span></span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>  cluster count_total  size       x       y       u       v</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>    <span class="sc">&lt;</span>int<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span> <span class="er">&lt;</span>int<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a><span class="dv">1</span>       <span class="dv">2</span>         <span class="dv">418</span>    <span class="dv">35</span> <span class="fl">441181.</span> <span class="fl">448073.</span> <span class="fl">430241.</span> <span class="fl">433909.</span></span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a><span class="dv">2</span>       <span class="dv">4</span>         <span class="dv">604</span>    <span class="dv">62</span> <span class="fl">420075.</span> <span class="fl">445507.</span> <span class="fl">430257.</span> <span class="fl">433642.</span></span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a><span class="dv">3</span>       <span class="dv">6</span>         <span class="dv">321</span>    <span class="dv">26</span> <span class="fl">442341.</span> <span class="fl">443211.</span> <span class="fl">430306.</span> <span class="fl">433899.</span></span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a><span class="dv">4</span>      <span class="dv">11</span>         <span class="dv">223</span>     <span class="dv">9</span> <span class="fl">424754.</span> <span class="fl">443360.</span> <span class="fl">430419.</span> <span class="fl">433474.</span></span>
+<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a><span class="dv">5</span>      <span class="dv">14</span>        <span class="dv">2111</span>   <span class="dv">179</span> <span class="fl">420372.</span> <span class="fl">440279.</span> <span class="fl">430621.</span> <span class="fl">433392.</span></span>
+<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a><span class="co"># ℹ 1 more variable: geometry &lt;LINESTRING [m]&gt;</span></span></code></pre></div>
+<p>Let’s visualise the aggregated flows overlaid on the original flows.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">flows_clustered</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span></span>
+<span>    lwd <span class="op">=</span> <span class="st">"count"</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"grey30"</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>    title.lwd <span class="op">=</span> <span class="st">"No. of people (Original flows)"</span>,</span>
+<span>    scale <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    legend.col.show <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    showNA <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_facets.html" class="external-link">tm_facets</a></span><span class="op">(</span></span>
+<span>    by <span class="op">=</span> <span class="st">"cluster"</span>,</span>
+<span>    free.coords <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    showNA <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">flows_aggregated</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_lines.html" class="external-link">tm_lines</a></span><span class="op">(</span></span>
+<span>    lwd <span class="op">=</span> <span class="st">"count_total"</span>,</span>
+<span>    col <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>    palette <span class="op">=</span> <span class="st">"Accent"</span>, <span class="co"># YlGn</span></span>
+<span>    alpha <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    title.col <span class="op">=</span> <span class="st">"Cluster"</span>,</span>
+<span>    title.lwd <span class="op">=</span> <span class="st">"No. of people (Representative linestring)"</span>,</span>
+<span>    scale <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    legend.outside <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    legend.outside.position <span class="op">=</span> <span class="st">"bottom"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_facets.html" class="external-link">tm_facets</a></span><span class="op">(</span></span>
+<span>    by <span class="op">=</span> <span class="st">"cluster"</span>,</span>
+<span>    free.coords <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    showNA <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_layout.html" class="external-link">tm_layout</a></span><span class="op">(</span></span>
+<span>    fontfamily <span class="op">=</span> <span class="st">"Georgia"</span>,</span>
+<span>    main.title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Aggregating flows to representative linestrings per cluster"</span><span class="op">)</span>,</span>
+<span>    main.title.size <span class="op">=</span> <span class="fl">1.1</span>,</span>
+<span>    main.title.color <span class="op">=</span> <span class="st">"azure4"</span>,</span>
+<span>    main.title.position <span class="op">=</span> <span class="st">"left"</span>,</span>
+<span>    legend.outside <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    legend.outside.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>    legend.stack <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
+<span>  <span class="op">)</span> <span class="op">-&gt;</span> <span class="va">flows_aggregated_map</span></span>
+<span></span>
+<span><span class="va">flows_aggregated_map</span></span></code></pre></div>
+<p><img src="reference/figures/cluster_aggregated_results.png"></p>
 </div>
 <div class="section level2">
 <h2 id="future-work">Future Work<a class="anchor" aria-label="anchor" href="#future-work"></a>
