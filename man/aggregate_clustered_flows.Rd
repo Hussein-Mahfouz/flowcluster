@@ -84,11 +84,6 @@ tm_shape(flows_clustered) +
   scale = 10,
   legend.col.show = FALSE,
   showNA = FALSE) +
-tm_facets(
-  by = "cluster",
-  free.coords = FALSE,
-  nrow = 3,
-  showNA = FALSE) +
 tm_shape(flows_agg_w) +
 tm_lines(
   lwd = "count_total",
@@ -100,17 +95,8 @@ tm_lines(
   scale = 10,
   legend.outside = TRUE,
   legend.outside.position = "bottom") +
- tm_facets(
-   by = "cluster",
-   free.coords = FALSE,
-   nrow = 4,
-   showNA = FALSE) +
  tm_layout(
-   fontfamily = "Georgia",
    main.title = "Aggregating flows to representative linestrings per cluster",
-   main.title.size = 1.1,
-   main.title.color = "azure4",
-   main.title.position = "left",
    legend.outside = TRUE,
    legend.outside.position = "bottom",
    legend.stack = "horizontal",
