@@ -6,6 +6,7 @@ test_that("aggregate_clustered_flows: unweighted aggregation works", {
     filter_by_length(1000, 20000) |>
     add_xyuv()
   
+  # add dummy clusters and sizes
   flows$cluster <- sample(1:5, nrow(flows), replace = TRUE)
   flows$size <- 1
   
@@ -28,6 +29,7 @@ test_that("aggregate_clustered_flows: weighted aggregation works", {
     filter_by_length(1000, 20000) |>
     add_xyuv()
   
+  # add dummy clusters and sizes
   flows$cluster <- sample(1:3, nrow(flows), replace = TRUE)
   flows$size <- 1
   

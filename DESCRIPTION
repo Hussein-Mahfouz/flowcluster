@@ -30,11 +30,14 @@ Imports:
     dplyr,
     glue,
     lwgeom,
+    purrr,
+    rlang,
     tibble,
     units,
     tidyr,
     tidyselect
 LazyData: true
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tmap (<= 3.3.4)
 Config/testthat/edition: 3
