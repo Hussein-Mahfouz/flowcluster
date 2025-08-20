@@ -45,9 +45,10 @@
 #'   dplyr::mutate(size = dplyr::n(),
 #'          count_cluster = sum(count)) |>
 #'   dplyr::ungroup() |>
-#'   # Filter out small clusters
-#'   dplyr::filter(size > 20, # minimum size of cluster
-#'                 count_cluster > 150) # minumum number of trips in cluster
+#'   # keep the biggest 9 clusters only (in terms of size)
+#'   dplyr::arrange(dplyr::desc(size)) |>
+#'   dplyr::slice_head(n = 9) 
+#'   
 #'          
 #' # ----- 2. Aggregation code
 #' 
@@ -75,7 +76,7 @@
 #' tm_facets(
 #'   by = "cluster",
 #'   free.coords = FALSE,
-#'   nrow = 4,
+#'   nrow = 3,
 #'   showNA = FALSE) +
 #' tm_shape(flows_agg_w) +
 #' tm_lines(
