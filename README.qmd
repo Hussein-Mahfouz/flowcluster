@@ -66,7 +66,7 @@ library(tmap)
 
 # Load sample flow data and project to metric CRS (e.g., EPSG:27700)
 flows_sf <- flows_leeds
-flows_sf <- st_transform(flows_sf, "EPSG:27700")
+flows_sf <- st_transform(flows_sf, "EPSG:27700") 
 ```
 
 Next, add a column containing the length (in meters) of each flow line.\
@@ -289,55 +289,78 @@ The plot shows the number of origin-destination pairs in each cluster. For each 
 
 ## Aggregating clustered desire lines
 
+After clustering, you may want to aggregate the flows in each cluster into a single line representing the average flow direction and magnitude. This can be useful for visualisation or further analysis. The package has a function to do this, which creates a linestring for each cluster based on the average start and end coordinates of the flows in that cluster.
+
 ```{r}
-names(flows_clustered)
-flows_aggregated <- flows_clustered |>
-  group_by(cluster) |>
-  summarise(
-    count_total = sum(count),
-    size = first(size),
-    x = weighted.mean(x, count),
-    y = weighted.mean(y, count),
-    u = weighted.mean(u, count),
-    v = weighted.mean(v, count)
-  )
-# Demo how to create a linestring for the first aggreged OD pair:
-flows_aggregated_sf_1 <- sf::st_sfc(
-  sf::st_linestring(rbind(
-    c(flows_aggregated$x[1], flows_aggregated$y[1]),
-    c(flows_aggregated$u[1], flows_aggregated$v[1])
-  )),
-  crs = sf::st_crs(flows_aggregated)
-)
-mapview::mapview(flows_aggregated_sf_1)
-# Create a function to create linestrings in this way:
-create_linestring <- function(aggregated_data) {
-  sf::st_linestring(rbind(
-    c(aggregated_data$x, aggregated_data$y),
-    c(aggregated_data$u, aggregated_data$v)
-  ))
-}
-# Function to do on all OD pairs with lapply:
-aggregated_data <- flows_aggregated
-create_linestrings <- function(aggregated_data) {
-  linestrings <-lapply(1:nrow(aggregated_data), function(i) {
-    create_linestring(aggregated_data[i, ])
-  })
-  linestrings_sfc <- sf::st_sfc(linestrings)
-  sf::st_sf(
-    aggregated_data,
-    geometry = linestrings_sfc
-  )
-}
-# Test it works:
-flows_aggregated_sfc <- create_linestrings(flows_aggregated)
-tm_shape(flows_aggregated_sfc) +
-  tm_lines(
-    lwd = "count_total",
-    scale = 9
-  )
+# Aggregate clustered flows into single linesting per cluster
+flows_aggregated <- aggregate_clustered_flows(flows_clustered,
+                                              weight = "count")
+
+# View the first few rows of the aggregated flows
+head(flows_aggregated, 5)
 
 ```
+
+Let's visualise the aggregated flows overlaid on the original flows.
+
+```{r}
+#| output: false
+
+tm_shape(flows_clustered) +
+  tm_lines(
+    lwd = "count",
+    col = "grey30",
+    alpha = 0.7,
+    title.lwd = "No. of people (Original flows)",
+    scale = 10,
+    legend.col.show = FALSE,
+    showNA = FALSE
+  ) +
+  tm_facets(
+    by = "cluster",
+    free.coords = FALSE,
+    nrow = 4,
+    showNA = FALSE) +
+tm_shape(flows_aggregated) +
+  tm_lines(
+    lwd = "count_total",
+    col = "red",
+    palette = "Accent", # YlGn
+    alpha = 1,
+    title.col = "Cluster",
+    title.lwd = "No. of people (Representative linestring)",
+    scale = 10,
+    legend.outside = TRUE,
+    legend.outside.position = "bottom"
+  ) +
+  tm_facets(
+    by = "cluster",
+    free.coords = FALSE,
+    nrow = 4,
+    showNA = FALSE) +
+  tm_layout(
+    fontfamily = "Georgia",
+    main.title = paste0("Aggregating flows to representative linestrings per cluster"),
+    main.title.size = 1.1,
+    main.title.color = "azure4",
+    main.title.position = "left",
+    legend.outside = TRUE,
+    legend.outside.position = "bottom",
+    legend.stack = "horizontal",
+  ) -> flows_aggregated_map
+
+flows_aggregated_map
+
+```
+
+```{r}
+#| echo: false
+# save the tmap output
+tmap_save(tm = flows_aggregated_map, filename = "man/figures/cluster_aggregated_results.png", width = 8, dpi = 1080, asp = 0)
+# load the saved map
+```
+
+![](man/figures/cluster_aggregated_results.png)
 
 ## Future Work
 
