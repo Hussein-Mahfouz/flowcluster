@@ -33,73 +33,63 @@ or simple means if no weights are provided. Each cluster is represented
 by one \code{LINESTRING}.
 }
 \examples{
-# ----- 1. Prepare the data
+# ----- 1. Basic Usage: A quick, runnable example ---
+# This demonstrates the function with minimal, fast data preparation.
+flows <- flowcluster::flows_leeds
 
-flows <- sf::st_transform(flows_leeds, 3857)
-# Add flow lengths and coordinates
-flows <- add_flow_length(flows)
-# filter by length
-flows <- filter_by_length(flows, length_min = 5000, length_max = 12000)
-flows <- add_xyuv(flows)
-# Calculate distances
-distances <- flow_distance(flows, alpha = 1.5, beta = 0.5)
-dmat <- distance_matrix(distances)
-wvec <- weight_vector(dmat, flows, weight_col = "count")
-
-# Cluster flows using DBSCAN
-flows_clustered <- cluster_flows_dbscan(dmat, wvec, flows, eps = 8, minPts = 70)
-
-# Filter out noise points and small clusters. Calculate size and count per cluster
-flows_clustered <- flows_clustered |>
-  dplyr::filter(cluster != 0) |> # these are normally the noisepoints
+# Create the required input columns in a single, fast pipeline
+flows_clustered <- flows |>
+  add_xyuv() |>
+  # Manually create 3 dummy clusters for demonstration
+  dplyr::mutate(cluster = sample(1:3, size = nrow(flows), replace = TRUE)) |>
+  # The function requires a 'size' column, so we add it
   dplyr::group_by(cluster) |>
-  dplyr::mutate(size = dplyr::n(),
-         count_cluster = sum(count)) |>
-  dplyr::ungroup() |>
-  # keep the biggest 9 clusters only (in terms of size)
-  dplyr::arrange(dplyr::desc(size)) |>
-  dplyr::slice_head(n = 9) 
-  
-         
-# ----- 2. Aggregation code
+  dplyr::add_tally(name = "size") |>
+  dplyr::ungroup()
 
-# Weighted aggregation (by flow counts)
+# Demonstrate the function
 flows_agg_w <- aggregate_clustered_flows(flows_clustered, weight = "count")
-head(flows_agg_w)
+print(flows_agg_w)
 
-# Unweighted aggregation
-flows_agg_uw <- aggregate_clustered_flows(flows_clustered)
-head(flows_agg_uw)
+# ----- 2. Detailed Workflow (not run by default) ---
+\dontrun{
+  # This example shows the ideal end-to-end workflow, from raw data
+  # to clustering and finally aggregation. It is not run during checks
+  # because the clustering steps are too slow.
 
-# ----- 3. Visualize the output ---
-if (requireNamespace("tmap", quietly = TRUE)) {
-  library(tmap)
+  # a) Prepare the data by filtering and adding coordinates
+  flows_prep <- flowcluster::flows_leeds |>
+    sf::st_transform(3857) |>
+    add_flow_length() |>
+    filter_by_length(length_min = 5000, length_max = 12000) |>
+    add_xyuv()
 
-tm_shape(flows_clustered) +
-  tm_lines(
-  lwd = "count",
-  col = "grey30",
-  alpha = 0.7,
-  title.lwd = "No. of people (Original flows)",
-  scale = 10,
-  legend.col.show = FALSE,
-  showNA = FALSE) +
-tm_shape(flows_agg_w) +
-tm_lines(
-  lwd = "count_total",
-  col = "red",
-  palette = "Accent", # YlGn
-  alpha = 1,
-  title.col = "Cluster",
-  title.lwd = "No. of people (Representative linestring)",
-  scale = 10,
-  legend.outside = TRUE,
-  legend.outside.position = "bottom") +
- tm_layout(
-   main.title = "Aggregating flows to representative linestrings per cluster",
-   legend.outside = TRUE,
-   legend.outside.position = "bottom",
-   legend.stack = "horizontal",
-  ) 
- }
+  # b) Calculate distances and cluster the flows
+  distances <- flow_distance(flows_prep, alpha = 1.5, beta = 0.5)
+  dmat <- distance_matrix(distances)
+  wvec <- weight_vector(dmat, flows_prep, weight_col = "count")
+  flows_clustered_real <- cluster_flows_dbscan(dmat, wvec, flows_prep, eps = 8, minPts = 70)
+
+  # c) Filter clusters and add a 'size' column
+  flows_clustered_real <- flows_clustered_real |>
+    dplyr::filter(cluster != 0) |> # Filter out noise points
+    dplyr::group_by(cluster) |>
+    dplyr::mutate(size = dplyr::n()) |>
+    dplyr::ungroup()
+
+  # d) Now, use the function on the clustered data
+  flows_agg_real <- aggregate_clustered_flows(flows_clustered_real, weight = "count")
+  print(flows_agg_real)
+
+  # e) Visualize the results
+  if (requireNamespace("tmap", quietly = TRUE)) {
+    library(tmap)
+    # This plot uses modern tmap v4 syntax.
+    tm_shape(flows_clustered_real, facet = "cluster") +
+      tm_lines(col = "grey50", alpha = 0.5) +
+    tm_shape(flows_agg_real) +
+      tm_lines(col = "red", lwd = 2) +
+    tm_layout(title = "Original Flows (Grey) and Aggregated Flows (Red)")
+  }
+}
 }
