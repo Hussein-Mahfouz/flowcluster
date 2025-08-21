@@ -1,3 +1,5 @@
+# flowcluster 0.2.1
+
 # flowcluster 0.2.0
 
 * Added `aggregate_clustered_flows()` to create representative lines from flow clusters. This function calculates the weighted or 
