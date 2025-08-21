@@ -1,5 +1,8 @@
 # flowcluster 0.2.1
 
+* Fixed `NOTE`s from CRAN submission by correcting spelling in `DESCRIPTION`, adding to the `WORDLIST`, and simplifying the 
+long-running example for `aggregate_clustered_flows()`.
+
 # flowcluster 0.2.0
 
 * Added `aggregate_clustered_flows()` to create representative lines from flow clusters. This function calculates the weighted or 

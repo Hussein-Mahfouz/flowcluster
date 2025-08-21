@@ -1,10 +1,14 @@
-## Submission Notes
+## Resubmission
 
-This is a regular update for flowcluster.
+This is a resubmission of flowcluster. The previous version was 0.2.0.
 
-In this version, I have added a new feature:
+I have addressed the NOTEs from the previous review:
 
-* Added the `aggregate_clustered_flows()` function to create representative lines from flow clusters.
+* **Misspelled words in DESCRIPTION**: I have corrected the typo ("delineating") and added "et" and "al" to an `inst/WORDLIST` file to prevent false positives.
+
+* **Invalid URL in DESCRIPTION**: I have confirmed that the GitHub Pages URL is correct and the site is active and accessible.
+
+* **Long-running example**: I have significantly simplified the example for `aggregate_clustered_flows()` to ensure it runs in under 5 seconds, which resolves this NOTE. The original, more detailed workflow is now included in a `\dontrun{}` block for user reference.
 
 ## R CMD check results
 
