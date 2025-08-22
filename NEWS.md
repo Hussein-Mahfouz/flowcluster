@@ -1,3 +1,5 @@
+# flowcluster (development version)
+
 # flowcluster 0.2.1
 
 * Fixed `NOTE`s from CRAN submission by correcting spelling in `DESCRIPTION`, adding to the `WORDLIST`, and simplifying the 
