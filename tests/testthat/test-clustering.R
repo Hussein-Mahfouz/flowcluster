@@ -61,7 +61,7 @@ test_that("dbscan_sensitivity: runs without error", {
   wvec <- weight_vector(mat, flows, weight_col = "count")
 
   options_epsilon <- seq(1, 6, by = 2)
-  options_minpts <- seq(0, 150, by = 50)
+  options_minpts <- seq(1, 150, by = 50)
 
   results <- dbscan_sensitivity(
     dist_mat = mat,
