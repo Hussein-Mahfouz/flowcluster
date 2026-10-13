@@ -1,5 +1,9 @@
 # flowcluster (development version)
 
+# flowcluster 0.2.2
+
+* Fixed the CRAN check issue addressed in PR #35 by correcting the clustering validation logic for `MinPts`.
+
 # flowcluster 0.2.1
 
 * Fixed `NOTE`s from CRAN submission by correcting spelling in `DESCRIPTION`, adding to the `WORDLIST`, and simplifying the 
