@@ -2,6 +2,12 @@
 
 ## flowcluster (development version)
 
+## flowcluster 0.2.2
+
+- Fixed the CRAN check issue addressed in PR
+  [\#35](https://github.com/hussein-mahfouz/flowcluster/issues/35) by
+  correcting the clustering validation logic for `MinPts`.
+
 ## flowcluster 0.2.1
 
 CRAN release: 2025-08-21

@@ -13,13 +13,13 @@ Source:
 [`DESCRIPTION`](https://github.com/hussein-mahfouz/flowcluster/blob/master/DESCRIPTION)
 
 Mahfouz H, Lovelace R (2026). *flowcluster: Cluster Origin-Destination
-Flow Data*. R package version 0.2.1.9000,
+Flow Data*. R package version 0.2.2,
 <https://hussein-mahfouz.github.io/flowcluster/>.
 
     @Manual{,
       title = {flowcluster: Cluster Origin-Destination Flow Data},
       author = {Hussein Mahfouz and Robin Lovelace},
       year = {2026},
-      note = {R package version 0.2.1.9000},
+      note = {R package version 0.2.2},
       url = {https://hussein-mahfouz.github.io/flowcluster/},
     }

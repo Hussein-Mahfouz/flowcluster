@@ -25,8 +25,8 @@ rownames and flow_ID_b as column names. This function converts the
 output of
 [`flow_distance()`](https://hussein-mahfouz.github.io/flowcluster/reference/flow_distance.md)
 into a format suitable for the
-[dbscan](https://rdrr.io/pkg/dbscan/man/dbscan.html) clustering
-algorithm.
+[dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md)
+clustering algorithm.
 
 ## Examples
 

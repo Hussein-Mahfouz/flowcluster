@@ -1,7 +1,7 @@
 # Cluster Flows using DBSCAN
 
-See [dbscan](https://rdrr.io/pkg/dbscan/man/dbscan.html) for details on
-the DBSCAN algorithm.
+See [dbscan](http://michael.hahsler.net/dbscan/reference/dbscan.md) for
+details on the DBSCAN algorithm.
 
 ## Usage
 
